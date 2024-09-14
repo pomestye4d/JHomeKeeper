@@ -1,0 +1,5 @@
+/build/
+/configuration/application.properties
+/.gradle/
+/out/
+/local-dev/config/
