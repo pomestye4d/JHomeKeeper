@@ -25,5 +25,5 @@ import items.tg
 import ru.vga.hk.core.api.builder.When
 
 val rule2 = When(tg.message("hello")){
-    println("got message from tg")
+    println("got hello message from tg")
 }

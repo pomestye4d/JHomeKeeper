@@ -21,9 +21,9 @@
 
 package ru.vga.hk.core.api.event;
 
-public interface EventBus {
-    void registerEventSource(EventSource<?> source);
+public interface EventBus  {
     <E> void registerRule(EventSource<E> eventSource, EventHandler<E> handler);
     <E>void publishEvent(String sourceId, E event);
-    void clear();
+
+    void cleanup();
 }

@@ -40,6 +40,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import static java.nio.file.StandardWatchEventKinds.*;
@@ -60,6 +61,7 @@ public class ConfigurationHandler implements Disposable {
             if(thread != null){
                 thread.interrupt();
             }
+            logger.info("configuration disposed");
         } catch (IOException e) {
             logger.error("unable to stop watch service", e);
         }
@@ -91,7 +93,8 @@ public class ConfigurationHandler implements Disposable {
                                 if (kind == OVERFLOW) {
                                     continue;
                                 }
-                                Environment.getPublished(EventBus.class).clear();
+                                Environment.getPublished(EventBus.class).cleanup();
+                                Environment.getPublished(Configuration.class).cleanup();
                                 System.gc();
                                 Thread.sleep(2000);
                                 refresh();
@@ -115,40 +118,39 @@ public class ConfigurationHandler implements Disposable {
             logger.info("refreshing configuration");
             Environment.getPublished(Configuration.class).clear();
             var dir = new File("config");
-            var file = Stream.of(dir.listFiles()).max(Comparator.comparing(File::getName)).orElse(null);
+            var file = Stream.of(Objects.requireNonNull(dir.listFiles())).max(Comparator.comparing(File::getName)).orElse(null);
             if(file == null){
                 logger.warn("unable to find configuration file");
                 return;
             }
             logger.info("using %s".formatted(file.getName()));
-            Arrays.stream(dir.listFiles()).forEach(it ->{
+            Arrays.stream(Objects.requireNonNull(dir.listFiles())).forEach(it ->{
                 if(!it.equals(file)){
                     it.delete();
                 }
             });
-            var classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()});
-            try {
-                var jarFile = new JarFile(file);
+            try (var classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()})) {
                 var classNames = new ArrayList<String>();
-                jarFile.stream().forEach(e -> {
-                    if(e.getName().equals("application.properties")){
-                        ExceptionUtils.wrapException(()->{
-                            try(var is = classLoader.getResourceAsStream(e.getName())){
-                                Environment.getPublished(Configuration.class).load(new InputStreamReader(is, StandardCharsets.UTF_8));
-                            }
-                        });
-                    }
-                    if (e.getName().endsWith(".class") & !e.getName().contains("$")) {
-                        classNames.add(e.getName().replace(".class", "").replace("/", "."));
-                    }
-                });
+                try (var jarFile = new JarFile(file)) {
+                    jarFile.stream().forEach(e -> {
+                        if (e.getName().equals("application.properties")) {
+                            logger.info("found application.properties");
+                            ExceptionUtils.wrapException(() -> {
+                                try (var is = new InputStreamReader(Objects.requireNonNull(classLoader.getResourceAsStream(e.getName())), StandardCharsets.UTF_8)) {
+                                    Environment.getPublished(Configuration.class).load(is);
+                                }
+                            });
+                        }
+                        if (e.getName().endsWith(".class") & !e.getName().contains("$")) {
+                            classNames.add(e.getName().replace(".class", "").replace("/", "."));
+                        }
+                    });
+                }
                 for (var cn : classNames) {
+                    logger.debug("processing class " + cn);
                     Class.forName(cn, true, classLoader);
                 }
-            } finally {
-                classLoader.close();
             }
-
             logger.info("configuration was refreshed");
 
         } catch (Throwable t) {

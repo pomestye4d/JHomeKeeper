@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.common.Disposable;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class Environment {
 
     private final static AtomicInteger counter = new AtomicInteger(0);
-    static final Logger log = LoggerFactory.getLogger(Environment.class);
+    private static final Logger log = LoggerFactory.getLogger(Environment.class);
 
     private static final Map<Class<?>, PublishedEntry<?>> publishedObjects = new ConcurrentHashMap<>();
 

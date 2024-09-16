@@ -21,6 +21,8 @@
 
 package ru.vga.hk.core.impl.timer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.event.EventSource;
@@ -36,6 +38,9 @@ public class TimerEventSource implements EventSource<TimerEvent> {
     private final static AtomicInteger counter = new AtomicInteger(0);
     private final Timer timer;
     private final String id;
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     public TimerEventSource(String prefix, int delayInSeconds, int periodInSeconds){
         id = (prefix == null? "anonymous-timer": prefix)+counter.incrementAndGet();
         timer = new Timer(id, true);
@@ -47,10 +52,12 @@ public class TimerEventSource implements EventSource<TimerEvent> {
                 Environment.getPublished(EventBus.class).publishEvent(getId(), timerEvent);
             }
         }, TimeUnit.SECONDS.toMillis(delayInSeconds), TimeUnit.SECONDS.toMillis(periodInSeconds));
+        log.info("scheduled timer " + this);
     }
     @Override
-    public void dispose() throws Exception {
+    public void dispose() {
         timer.cancel();
+        log.info("disposed timer " + this);
     }
 
     @Override

@@ -26,7 +26,10 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.generics.BotSession;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.vga.hk.core.api.common.Disposable;
+import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.tg.api.TgBotApi;
@@ -35,15 +38,19 @@ import ru.vga.hk.tg.api.TgMessageEvent;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TgBotApiImpl extends TelegramLongPollingBot implements TgBotApi {
+public class TgBotApiImpl extends TelegramLongPollingBot implements TgBotApi, Disposable {
     private int connectCount;
     private final String username;
     private final int RECONNECT_PAUSE = 10000;
     private final Map<String, String> patterns = new ConcurrentHashMap<>();
     private final Logger log = LoggerFactory.getLogger(getClass());
+
+    private BotSession session;
+
     public TgBotApiImpl(String username, String token) throws Exception {
         super(token);
         this.username = username;
+        Environment.getPublished(Configuration.class).registerDisposable(this);
         if(token == null || token.isEmpty()){
             return;
         }
@@ -53,8 +60,8 @@ public class TgBotApiImpl extends TelegramLongPollingBot implements TgBotApi {
     private void botConnect() throws Exception {
         connectCount++;
         try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(this);
+            var telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            session = telegramBotsApi.registerBot(this);
             log.info("TelegramAPI started. Look for messages");
         } catch (Exception e) {
             log.error("Cant Connect. Pause " + RECONNECT_PAUSE / 1000 + "sec and try again. Error: " + e.getMessage());
@@ -101,4 +108,12 @@ public class TgBotApiImpl extends TelegramLongPollingBot implements TgBotApi {
     }
 
 
+    @Override
+    public void dispose(){
+        log.info("disposed");
+        if(session != null && session.isRunning()){
+            session.stop();
+            log.info("session stopped");
+        }
+    }
 }

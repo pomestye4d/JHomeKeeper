@@ -23,57 +23,39 @@ package ru.vga.hk.core.impl.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.vga.hk.core.api.common.Disposable;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.event.EventHandler;
 import ru.vga.hk.core.api.event.EventSource;
-import ru.vga.hk.core.api.exception.ExceptionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class EventBusImpl implements EventBus, Disposable {
+public class EventBusImpl implements EventBus {
 
-    private List<EventSource<?>> eventSources = Collections.synchronizedList(new ArrayList<>());
+    private final Map<String, EventHandler<?>> handlers = new ConcurrentHashMap<>();
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final Map<String, EventHandler<?>> handlers = new ConcurrentHashMap<>();
-    @Override
-    public void registerEventSource(EventSource<?> source) {
-        eventSources.add(source);
-    }
 
     @Override
     public <E> void registerRule(EventSource<E> eventSource, EventHandler<E> handler) {
+        log.debug("registered rule with handler %s for event %s".formatted(handler, eventSource));
         handlers.put(eventSource.getId(), handler);
     }
 
     @Override
     public <E> void publishEvent(String sourceId, E event) {
+        log.debug("published event of type %s with content %s".formatted(sourceId, event));
         var handler = handlers.get(sourceId);
-        if(handler == null){
-           return;
+        if (handler == null) {
+            log.debug("handler was not found");
+            return;
         }
-        ((EventHandler<E>)handler).handle(event);
+        ((EventHandler<E>) handler).handle(event);
     }
 
 
-    @Override
-    public void clear() {
-        for(var src: eventSources){
-            ExceptionUtils.wrapException(()->{
-                src.dispose();
-            });
-        }
-        eventSources.clear();
+    public void cleanup() {
+        log.info("cleaning up");
         handlers.clear();
-    }
-
-    @Override
-    public void dispose() throws Exception {
-        clear();
     }
 }
