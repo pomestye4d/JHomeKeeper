@@ -28,6 +28,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.BotSession;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.vga.hk.core.api.common.BasicEventSource;
 import ru.vga.hk.core.api.common.Disposable;
 import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.environment.Environment;
@@ -79,10 +80,10 @@ public class TgBotApiImpl extends TelegramLongPollingBot implements TgBotApi, Di
         }
     }
 
-    public TgEventSource addPattern(String pattern) {
+    public BasicEventSource<TgMessageEvent> addPattern(String pattern) {
         var id = "tg-bot-%s-%s".formatted(username, pattern);
         patterns.put(pattern, id);
-        return new TgEventSource(id);
+        return new BasicEventSource<>(id);
     }
 
     @Override

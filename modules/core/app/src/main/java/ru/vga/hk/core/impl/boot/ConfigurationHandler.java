@@ -29,6 +29,7 @@ import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.exception.ExceptionUtils;
+import ru.vga.hk.core.impl.webserver.WebServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,6 +147,8 @@ public class ConfigurationHandler implements Disposable {
                         }
                     });
                 }
+                var webServer = new WebServer();
+                Environment.getPublished(Configuration.class).registerDisposable(webServer);
                 for (var cn : classNames) {
                     logger.debug("processing class " + cn);
                     Class.forName(cn, true, classLoader);

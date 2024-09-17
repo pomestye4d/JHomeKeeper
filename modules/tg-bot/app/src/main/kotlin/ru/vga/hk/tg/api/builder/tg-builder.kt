@@ -21,15 +21,16 @@
 
 package ru.vga.hk.tg.api.builder
 
+import ru.vga.hk.core.api.common.BasicEventSource
+import ru.vga.hk.tg.api.TgMessageEvent
 import ru.vga.hk.tg.impl.TgBotApiImpl
-import ru.vga.hk.tg.impl.TgEventSource
 
 class TgBotExt(private val bot:TgBotApiImpl){
-    fun message(pattern:String):TgEventSource{
+    fun message(pattern:String): BasicEventSource<TgMessageEvent> {
         return bot.addPattern(pattern)
     }
 }
 fun tgBot(userName:String?, token:String?):TgBotExt{
-    val bot = TgBotApiImpl(userName, token);
+    val bot = TgBotApiImpl(userName, token)
     return TgBotExt(bot)
 }

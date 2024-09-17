@@ -21,11 +21,12 @@
 
 package ru.vga.hk.core.api.builder
 
+import ru.vga.hk.core.api.common.BasicEventSource
 import ru.vga.hk.core.api.environment.Configuration
 import ru.vga.hk.core.api.environment.Environment
 import ru.vga.hk.core.api.event.EventBus
-import ru.vga.hk.core.api.event.EventHandler
 import ru.vga.hk.core.api.event.EventSource
+import ru.vga.hk.core.api.rest.RestEvent
 import ru.vga.hk.core.api.timer.TimerEvent
 import ru.vga.hk.core.impl.timer.TimerEventSource
 
@@ -47,6 +48,13 @@ fun<E> When(eventSource:EventSource<E>, handler:E.()->Unit){
      }
 }
 
+fun rest(path:String, handler: (e: RestEvent) -> Unit){
+    Environment.getPublished(EventBus::class.java).registerRule(BasicEventSource<RestEvent>("rest-${path}")) {
+        handler.invoke(it)
+    }
+}
+
 fun configProperty(name: String):String?{
     return Environment.getPublished(Configuration::class.java).getProperty(name)
 }
+

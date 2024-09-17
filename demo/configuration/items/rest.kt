@@ -19,26 +19,10 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.tg.impl;
+package items
 
-import ru.vga.hk.core.api.event.EventSource;
-import ru.vga.hk.tg.api.TgMessageEvent;
+import ru.vga.hk.core.api.builder.rest
 
-public class TgEventSource implements EventSource<TgMessageEvent> {
-
-    public TgEventSource(String id) {
-        this.id = id;
-    }
-
-    private final String id;
-
-    @Override
-    public void dispose() throws Exception {
-        //noops
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
+var rest1 = rest("hello") {
+    println("got message from rest")
 }
