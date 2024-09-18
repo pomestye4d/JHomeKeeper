@@ -77,8 +77,7 @@ public class RrdStorageImpl implements RrdStorage, Disposable {
                 var rrdDef = new RrdDef(file.getAbsolutePath(), step);
                 rrdDef.addDatasource("data", DsType.GAUGE, step, Double.NaN, Double.NaN);
                 rrdDef.addArchive(ConsolFun.AVERAGE, 0.5, 10, 5*step);
-                var rrdDb = RrdDb.of(rrdDef);
-                return rrdDb;
+                return RrdDb.of(rrdDef);
             }));
             var sample = db.createSample();
             sample.setTime(System.currentTimeMillis());

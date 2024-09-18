@@ -23,13 +23,13 @@ package ru.vga.hk.core.impl.httpItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.vga.hk.core.api.httpItem.HttpEvent;
-import ru.vga.hk.core.api.httpItem.HttpItemOptions;
 import ru.vga.hk.core.api.common.Disposable;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.event.EventSource;
 import ru.vga.hk.core.api.exception.ExceptionUtils;
+import ru.vga.hk.core.api.httpItem.HttpEvent;
+import ru.vga.hk.core.api.httpItem.HttpItemOptions;
 import ru.vga.hk.core.api.storage.RrdStorage;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -42,18 +42,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class HttpItem implements Disposable, EventSource<Number> {
-
-    private final static AtomicInteger counter = new AtomicInteger(0);
 
     private final Timer timer;
 
@@ -65,7 +62,7 @@ public class HttpItem implements Disposable, EventSource<Number> {
         this.id = id;
         timer = new Timer(id, true);
         HttpItemOptions options = new HttpItemOptions();
-        options.setValueExtractor((value) -> value == null || value.length() == 0 ? null : new BigDecimal(value));
+        options.setValueExtractor((value) -> value == null || value.isEmpty() ? null : new BigDecimal(value));
         options.setBodyBuilder(() -> null);
         if (customizer != null) {
             customizer.accept(options);
@@ -74,7 +71,7 @@ public class HttpItem implements Disposable, EventSource<Number> {
             @Override
             public void run() {
                 ExceptionUtils.wrapException(() -> {
-                    var url = new URL(path);
+                    var url = new URI(path).toURL();
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setDoInput(true);
                     connection.setDoOutput(true);
@@ -130,7 +127,7 @@ public class HttpItem implements Disposable, EventSource<Number> {
 
     @Override
     public String getId() {
-        return "";
+        return id;
     }
 
     private static final X509TrustManager trustManager =
