@@ -19,11 +19,9 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.storage;
 
-import ru.vga.hk.core.api.builder.rest
-
-var rest1 = rest("hello") {
-    println("got message from rest")
-    callback.send("225")
+public interface RrdStorage {
+    void store(String id, Number value, String strategy);
+    void addStrategy(String id, StorageStrategy strategy);
 }

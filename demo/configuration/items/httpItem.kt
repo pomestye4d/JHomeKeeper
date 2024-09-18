@@ -21,9 +21,6 @@
 
 package items
 
-import ru.vga.hk.core.api.builder.rest
+import ru.vga.hk.core.api.builder.httpItem
 
-var rest1 = rest("hello") {
-    println("got message from rest")
-    callback.send("225")
-}
+var httpItem1 = httpItem("item1","http://localhost:8080/hello", 10)

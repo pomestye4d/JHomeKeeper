@@ -19,11 +19,16 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.storage;
 
-import ru.vga.hk.core.api.builder.rest
+public class StorageStrategy {
+    private int periodInSeconds;
 
-var rest1 = rest("hello") {
-    println("got message from rest")
-    callback.send("225")
+    public int getPeriodInSeconds() {
+        return periodInSeconds;
+    }
+
+    public void setPeriodInSeconds(int periodInSeconds) {
+        this.periodInSeconds = periodInSeconds;
+    }
 }

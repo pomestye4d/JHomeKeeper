@@ -19,11 +19,37 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.httpItem;
 
-import ru.vga.hk.core.api.builder.rest
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-var rest1 = rest("hello") {
-    println("got message from rest")
-    callback.send("225")
+public class HttpItemOptions {
+    private Supplier<String> bodyBuilder;
+    private Function<String, Number> valueExtractor;
+    private String storageStrategy;
+
+    public Function<String, Number> getValueExtractor() {
+        return valueExtractor;
+    }
+
+    public void setValueExtractor(Function<String, Number> valueExtractor) {
+        this.valueExtractor = valueExtractor;
+    }
+
+    public Supplier<String> getBodyBuilder() {
+        return bodyBuilder;
+    }
+
+    public void setBodyBuilder(Supplier<String> bodyBuilder) {
+        this.bodyBuilder = bodyBuilder;
+    }
+
+    public String getStorageStrategy() {
+        return storageStrategy;
+    }
+
+    public void setStorageStrategy(String storageStrategy) {
+        this.storageStrategy = storageStrategy;
+    }
 }

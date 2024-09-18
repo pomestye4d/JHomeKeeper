@@ -26,8 +26,12 @@ import ru.vga.hk.core.api.environment.Configuration
 import ru.vga.hk.core.api.environment.Environment
 import ru.vga.hk.core.api.event.EventBus
 import ru.vga.hk.core.api.event.EventSource
+import ru.vga.hk.core.api.httpItem.HttpItemOptions
 import ru.vga.hk.core.api.rest.RestEvent
+import ru.vga.hk.core.api.storage.RrdStorage
+import ru.vga.hk.core.api.storage.StorageStrategy
 import ru.vga.hk.core.api.timer.TimerEvent
+import ru.vga.hk.core.impl.httpItem.HttpItem
 import ru.vga.hk.core.impl.timer.TimerEventSource
 
 fun timer(name:String, delayInSeconds: Int, periodInSeconds:Int):EventSource<TimerEvent>{
@@ -48,13 +52,21 @@ fun<E> When(eventSource:EventSource<E>, handler:E.()->Unit){
      }
 }
 
-fun rest(path:String, handler: (e: RestEvent) -> Unit){
+fun rest(path:String, handler: RestEvent.()->Unit){
     Environment.getPublished(EventBus::class.java).registerRule(BasicEventSource<RestEvent>("rest-${path}")) {
         handler.invoke(it)
     }
+}
+fun httpItem(id: String, path:String, periodInSeconds: Int, customizer: ((options: HttpItemOptions)-> Unit)? = null){
+    val httpItem = HttpItem(id, path, periodInSeconds, customizer)
+    Environment.getPublished(Configuration::class.java).registerDisposable(httpItem)
 }
 
 fun configProperty(name: String):String?{
     return Environment.getPublished(Configuration::class.java).getProperty(name)
 }
 
+fun storageStrategy(id: String, periodInSeconds: Int):String{
+    Environment.getPublished(RrdStorage::class.java).addStrategy(id, StorageStrategy().also { it.periodInSeconds = periodInSeconds });
+    return id
+}

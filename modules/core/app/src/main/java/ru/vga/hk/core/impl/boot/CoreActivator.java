@@ -25,7 +25,9 @@ import ru.vga.hk.core.api.boot.Activator;
 import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.environment.Environment;
+import ru.vga.hk.core.api.storage.RrdStorage;
 import ru.vga.hk.core.impl.event.EventBusImpl;
+import ru.vga.hk.core.impl.storage.RrdStorageImpl;
 
 public class CoreActivator implements Activator {
     @Override

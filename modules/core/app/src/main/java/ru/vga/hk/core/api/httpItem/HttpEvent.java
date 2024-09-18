@@ -19,11 +19,9 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.httpItem;
 
-import ru.vga.hk.core.api.builder.rest
+import ru.vga.hk.core.api.common.BaseEvent;
 
-var rest1 = rest("hello") {
-    println("got message from rest")
-    callback.send("225")
+public class HttpEvent extends BaseEvent {
 }

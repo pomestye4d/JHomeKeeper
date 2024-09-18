@@ -19,11 +19,8 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.rest;
 
-import ru.vga.hk.core.api.builder.rest
-
-var rest1 = rest("hello") {
-    println("got message from rest")
-    callback.send("225")
+public interface RestCallback {
+    void send(String message) throws Exception;
 }
