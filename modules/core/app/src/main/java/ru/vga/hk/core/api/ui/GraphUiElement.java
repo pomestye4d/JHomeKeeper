@@ -19,45 +19,14 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.core.api.environment;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.vga.hk.core.api.common.Disposable;
-import ru.vga.hk.core.api.ui.UiGroup;
+package ru.vga.hk.core.api.ui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
-public class Configuration extends Properties {
-    private final List<Disposable> disposables = Collections.synchronizedList(new ArrayList<>());
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
-
-    public final List<UiGroup> ui = new ArrayList<>();
-
-    @Override
-    public synchronized String toString() {
-        return getClass().getName();
-    }
-
-    public void registerDisposable(Disposable d){
-        log.info("registered disposable " + d);
-        disposables.add(d);
-    }
-
-    public void cleanup(){
-        ui.clear();
-        Collections.reverse(disposables);
-        for(var disp: disposables){
-            try{
-                disp.dispose();
-                log.info("disposed " + disp);
-            } catch (Throwable t){
-                log.error("unable to dispose " + disp, t);
-            }
-        }
+public class GraphUiElement extends BaseUiElement{
+    public final List<GraphPlot> plots = new ArrayList<>();
+    public GraphUiElement(String name) {
+        super(UiElementType.GRAPH, name);
     }
 }

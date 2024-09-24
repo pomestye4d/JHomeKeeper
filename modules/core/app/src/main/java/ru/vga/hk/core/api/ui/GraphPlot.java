@@ -19,8 +19,14 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.ui;
 
-import ru.vga.hk.core.api.builder.httpItem
+public class GraphPlot {
+    public final String itemId;
+    public final String name;
 
-var httpItem1 = httpItem("item1","http://localhost:8080/api/hello", 10)
+    public GraphPlot(String itemId, String name) {
+        this.itemId = itemId;
+        this.name = name;
+    }
+}

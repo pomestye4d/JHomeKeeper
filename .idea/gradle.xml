@@ -6,7 +6,6 @@
       <GradleProjectSettings>
         <option name="delegatedBuild" value="false" />
         <option name="testRunner" value="PLATFORM" />
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
@@ -18,6 +17,7 @@
             <option value="$PROJECT_DIR$/modules/core/app" />
             <option value="$PROJECT_DIR$/modules/tg-bot" />
             <option value="$PROJECT_DIR$/modules/tg-bot/app" />
+            <option value="$PROJECT_DIR$/web-ui" />
           </set>
         </option>
       </GradleProjectSettings>

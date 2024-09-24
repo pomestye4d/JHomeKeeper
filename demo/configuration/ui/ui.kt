@@ -19,8 +19,15 @@
  * SOFTWARE.
  */
 
-package items
+package ui
 
-import ru.vga.hk.core.api.builder.httpItem
+import items.httpItem1
+import ru.vga.hk.core.api.builder.ui
 
-var httpItem1 = httpItem("item1","http://localhost:8080/api/hello", 10)
+val ui = ui {
+    group("Graphs"){
+        graph("Test"){
+            plot("Test", httpItem1)
+        }
+    }
+}

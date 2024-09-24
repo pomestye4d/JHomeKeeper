@@ -19,8 +19,8 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.ui;
 
-import ru.vga.hk.core.api.builder.httpItem
-
-var httpItem1 = httpItem("item1","http://localhost:8080/api/hello", 10)
+public enum UiElementType {
+    GRAPH
+}
