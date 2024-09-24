@@ -73,7 +73,7 @@ fun configProperty(name: String): String? {
 
 fun storageStrategy(id: String, periodInSeconds: Int): String {
     Environment.getPublished(RrdStorage::class.java)
-        .addStrategy(id, StorageStrategy().also { it.periodInSeconds = periodInSeconds });
+        .addStrategy(id, StorageStrategy().also { it.periodInSeconds = periodInSeconds })
     return id
 }
 

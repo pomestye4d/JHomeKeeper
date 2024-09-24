@@ -22,13 +22,10 @@
 package ru.vga.hk.core.impl.webserver;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.environment.Environment;
-import ru.vga.hk.core.api.ui.GraphUiElement;
 import ru.vga.hk.core.api.ui.UiGroup;
 
 import java.io.IOException;

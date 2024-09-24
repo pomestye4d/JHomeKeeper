@@ -11,13 +11,9 @@ import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.common.Disposable;
 import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.environment.Environment;
-import ru.vga.hk.core.api.event.EventBus;
-import ru.vga.hk.core.api.rest.RestCallback;
-import ru.vga.hk.core.api.rest.RestEvent;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
