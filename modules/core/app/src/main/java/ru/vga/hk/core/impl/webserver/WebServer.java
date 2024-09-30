@@ -19,7 +19,6 @@ import java.util.concurrent.Executors;
 
 public class WebServer implements Disposable {
 
-    private static final Logger log = LoggerFactory.getLogger(WebServer.class);
     private final HttpServer delegate;
 
     private final ExecutorService executorService;

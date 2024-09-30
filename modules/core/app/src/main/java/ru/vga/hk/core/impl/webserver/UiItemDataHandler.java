@@ -39,7 +39,7 @@ import java.time.Instant;
 public class UiItemDataHandler implements HttpHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) {
         if (!"POST".equals(exchange.getRequestMethod())) {
             log.warn("invalid request method: {}", exchange.getRequestMethod());
             exchange.close();

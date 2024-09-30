@@ -36,7 +36,7 @@ import java.nio.charset.StandardCharsets;
 public class ApiHandler implements HttpHandler {
     private final Logger log = LoggerFactory.getLogger(ApiHandler.class);
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    public void handle(HttpExchange exchange) {
         if (!"GET".equals(exchange.getRequestMethod()) && !"POST".equals(exchange.getRequestMethod())) {
             exchange.close();
             return;

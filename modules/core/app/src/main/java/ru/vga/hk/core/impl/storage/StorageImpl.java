@@ -99,9 +99,7 @@ public class StorageImpl implements Storage, Disposable {
                 var strategy = (RrdStorageStrategy) (this.items2Strategy.containsKey(id)? this.strategies.get(this.items2Strategy.get(id)) : this.defaultStrategy);
                 var rrdDef = new RrdDef(file.getAbsolutePath(), 0,strategy.def.getStep());
                 rrdDef.addDatasource("data", DsType.GAUGE, 3600, Double.NaN, Double.NaN);
-                Stream.of(strategy.def.getArcDefs()).forEach(it -> {
-                    rrdDef.addArchive(ConsolFun.AVERAGE, it.getXff(), it.getSteps(), it.getRows());
-                });
+                Stream.of(strategy.def.getArcDefs()).forEach(it -> rrdDef.addArchive(ConsolFun.AVERAGE, it.getXff(), it.getSteps(), it.getRows()));
                 return RrdDb.of(rrdDef);
             }));
             var sample = db.createSample();
