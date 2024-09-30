@@ -28,8 +28,9 @@ public class WebServer implements Disposable {
         executorService = Executors.newFixedThreadPool(5);
         delegate = HttpServer.create(new InetSocketAddress(Integer.parseInt(Environment.getPublished(Configuration.class).getProperty("webServer.port", "8080"))), 10);
         delegate.setExecutor(executorService);
-        delegate.createContext("/api", new ApiHandler());
+        delegate.createContext("/extApi", new ApiHandler());
         delegate.createContext("/ui/config", new UiConfigHandler());
+        delegate.createContext("/ui/itemData", new UiItemDataHandler());
         delegate.start();
     }
 

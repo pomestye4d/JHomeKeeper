@@ -3,7 +3,6 @@
 import React, {FunctionComponent} from 'react';
 import {ProLayout} from '@ant-design/pro-layout';
 import {BrowserRouter, Link, Outlet, Route, Routes, useNavigate} from "react-router-dom";
-import {NavigateFunction} from "react-router/dist/lib/hooks";
 
 export type MenuItem = {
     name: string,
@@ -15,51 +14,50 @@ export type MenuItem = {
 export type MainFrameProps = {
     // eslint-disable-next-line no-unused-vars
     views: Map<string, FunctionComponent>
+    configuration: Map<string, any>,
     menu: MenuItem[]
 }
 
+export const ConfigurationContext = React.createContext(new Map());
+
 export function HomeKeeper(props: MainFrameProps) {
-    return (<BrowserRouter>
-        <App views={props.views} menu={props.menu}/>
-    </BrowserRouter>)
-}
-
-
-function App(props: MainFrameProps) {
-    const nav = useNavigate();
-    return <Routes>
-        <Route path="/" element={MainFrameComponent({...props, navigate: nav})}>
-            <Route key="/" path="/" element={<div>Welcome</div>}/>
-            {[...props.views.entries()].map(entry => {
-                return <Route key={entry[0]} path={entry[0]}>
-                    <Route key={entry[0]} path=":id" element={React.createElement(entry[1], {})}/>
+    return (
+        <ConfigurationContext.Provider value={props.configuration}>
+            <BrowserRouter>
+                return <Routes>
+                <Route path="/" element={React.createElement(MainFrameComponent, props)}>
+                    <Route key="/" path="/" element={<div>Welcome</div>}/>
+                    {[...props.views.entries()].map(entry => {
+                        return <Route key={entry[0]} path={`${entry[0]}/:id`}
+                                      element={React.createElement(entry[1], {})}/>
+                    })
+                    }
                 </Route>
-            })
-            }
-        </Route>
-    </Routes>
+            </Routes>
+            </BrowserRouter></ConfigurationContext.Provider>)
 }
 
-export function MainFrameComponent(props: MainFrameProps & { navigate: NavigateFunction }) {
+export function MainFrameComponent(props: MainFrameProps) {
     const createItem = (item: MenuItem) => ({
         name: item.name,
         path: `${item.type}/${item.id}`,
     });
+    const navigate = useNavigate();
     return (
         <div
             id="test-pro-layout"
             style={{
-                height: '100vh',
+                height: 'calc(100vh - 40px)',
                 overflow: 'auto',
             }}
         >
             <ProLayout
                 title="Home Keeper"
                 onMenuHeaderClick={() => {
-                    props.navigate("/");
+                    navigate("/");
                 }}
                 style={{
-                    height: '100vh',
+                    height: '100%',
                 }}
                 menu={{
                     collapsedShowGroupTitle: true,

@@ -12,7 +12,8 @@ module.exports = merge.merge(commonConfig, {
       directory: path.join(__dirname, 'build'),
     },
     proxy: {
-      '/api': 'http://localhost:8080',
+      '/extApi': 'http://localhost:8080',
+      '/ui': 'http://localhost:8080',
     },
     compress: false,
     port: 3000,

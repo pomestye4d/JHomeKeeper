@@ -19,8 +19,31 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.core.api.ui;
+package ru.vga.hk.core.impl.storage;
 
-public enum UiElementType {
-    GRAPH
+import org.rrd4j.core.RrdDef;
+import ru.vga.hk.core.api.exception.ExceptionUtils;
+import ru.vga.hk.core.api.storage.StorageStrategy;
+
+public class RrdStorageStrategy implements StorageStrategy {
+    public static final String type = "RRD";
+
+    private final String id;
+
+    public final RrdDef def;
+
+    public RrdStorageStrategy(String id) {
+        this.id = id;
+        this.def = ExceptionUtils.wrapException(() -> new RrdDef("file.rrd"));
+    }
+
+    @Override
+    public String getType() {
+        return type;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
 }

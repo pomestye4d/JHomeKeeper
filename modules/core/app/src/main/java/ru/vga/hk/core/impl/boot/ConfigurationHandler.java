@@ -29,8 +29,8 @@ import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.exception.ExceptionUtils;
-import ru.vga.hk.core.api.storage.RrdStorage;
-import ru.vga.hk.core.impl.storage.RrdStorageImpl;
+import ru.vga.hk.core.api.storage.Storage;
+import ru.vga.hk.core.impl.storage.StorageImpl;
 import ru.vga.hk.core.impl.webserver.WebServer;
 
 import java.io.File;
@@ -149,11 +149,11 @@ public class ConfigurationHandler implements Disposable {
                         }
                     });
                 }
-                if(Environment.isPublished(RrdStorage.class)){
-                    Environment.unpublish(RrdStorage.class);
+                if(Environment.isPublished(Storage.class)){
+                    Environment.unpublish(Storage.class);
                 }
-                var rrdStorage= new RrdStorageImpl();
-                Environment.publish(RrdStorage.class, rrdStorage);
+                var rrdStorage= new StorageImpl();
+                Environment.publish(Storage.class, rrdStorage);
                 Environment.getPublished(Configuration.class).registerDisposable(rrdStorage);
                 var webServer = new WebServer();
                 Environment.getPublished(Configuration.class).registerDisposable(webServer);

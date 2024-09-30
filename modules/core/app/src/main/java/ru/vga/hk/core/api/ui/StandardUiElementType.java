@@ -19,9 +19,8 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.core.api.storage;
+package ru.vga.hk.core.api.ui;
 
-public interface RrdStorage {
-    void store(String id, Number value, String strategy);
-    void addStrategy(String id, StorageStrategy strategy);
+public enum StandardUiElementType {
+    GRAPH
 }

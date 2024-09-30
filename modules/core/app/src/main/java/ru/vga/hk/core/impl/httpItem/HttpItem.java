@@ -30,7 +30,7 @@ import ru.vga.hk.core.api.event.EventSource;
 import ru.vga.hk.core.api.exception.ExceptionUtils;
 import ru.vga.hk.core.api.httpItem.HttpEvent;
 import ru.vga.hk.core.api.httpItem.HttpItemOptions;
-import ru.vga.hk.core.api.storage.RrdStorage;
+import ru.vga.hk.core.api.storage.Storage;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -58,6 +58,8 @@ public class HttpItem implements Disposable, EventSource<Number> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    public final String storageStrategyId;
+
     public HttpItem(String id, String path, int periodInSeconds,  Consumer<HttpItemOptions> customizer) {
         this.id = id;
         timer = new Timer(id, true);
@@ -67,6 +69,7 @@ public class HttpItem implements Disposable, EventSource<Number> {
         if (customizer != null) {
             customizer.accept(options);
         }
+        storageStrategyId = options.getStorageStrategyId();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -110,7 +113,7 @@ public class HttpItem implements Disposable, EventSource<Number> {
                     var value = options.getValueExtractor().apply(response);
                     if(value != null) {
                         logger.debug("storing value %s".formatted(value));
-                        Environment.getPublished(RrdStorage.class).store(id, value, options.getStorageStrategy());
+                        Environment.getPublished(Storage.class).store(id, value);
                         Environment.getPublished(EventBus.class).publishEvent(id, new HttpEvent());
                         return;
                     }

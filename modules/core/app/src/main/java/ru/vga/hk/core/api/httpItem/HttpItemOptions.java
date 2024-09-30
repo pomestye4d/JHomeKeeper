@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 public class HttpItemOptions {
     private Supplier<String> bodyBuilder;
     private Function<String, Number> valueExtractor;
-    private String storageStrategy;
+    private String storageStrategyId;
 
     public Function<String, Number> getValueExtractor() {
         return valueExtractor;
@@ -45,11 +45,11 @@ public class HttpItemOptions {
         this.bodyBuilder = bodyBuilder;
     }
 
-    public String getStorageStrategy() {
-        return storageStrategy;
+    public String getStorageStrategyId() {
+        return storageStrategyId;
     }
 
-    public void setStorageStrategy(String storageStrategy) {
-        this.storageStrategy = storageStrategy;
+    public void setStorageStrategyId(String storageStrategyId) {
+        this.storageStrategyId = storageStrategyId;
     }
 }

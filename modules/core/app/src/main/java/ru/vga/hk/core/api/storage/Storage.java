@@ -19,14 +19,16 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.core.api.ui;
+package ru.vga.hk.core.api.storage;
 
-import java.util.ArrayList;
+import ru.vga.hk.core.api.common.Pair;
+
+import java.time.Instant;
 import java.util.List;
 
-public class GraphUiElement extends BaseUiElement{
-    public final List<GraphPlot> plots = new ArrayList<>();
-    public GraphUiElement(String id, String name) {
-        super(id, StandardUiElementType.GRAPH.name(), name);
-    }
+public interface Storage {
+    void addStrategy(StorageStrategy strategy);
+    void assignStrategy(String itemId, String strategyId);
+    void store(String id, Number value);
+    List<Pair<Instant, Number>> getData(String id, Instant from, Instant to);
 }

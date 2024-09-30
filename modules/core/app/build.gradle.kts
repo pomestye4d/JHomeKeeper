@@ -17,5 +17,6 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.8")
     implementation("org.rrd4j:rrd4j:3.9")
     implementation("com.google.code.gson:gson:2.11.0")
+    testImplementation("junit:junit:4.12")
 
 }

@@ -1,38 +1,54 @@
 // eslint-disable-next-line no-use-before-define
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { useLocation, useParams } from 'react-router-dom';
-import { HomeKeeper, MenuItem } from './src/main-frame';
+import { useParams } from 'react-router-dom';
+import { ConfigurationContext, HomeKeeper, MenuItem } from './src/main-frame';
 
-const root = createRoot(document.getElementById('root') as Element);
-const menu = [
-  {
-    name: 'Graphs',
-    children: [
-      {
-        name: 'Graph 1',
-        type: 'graph',
-        id: '1',
-      },
-      {
-        name: 'Graph 2',
-        type: 'graph',
-        id: '2',
-      },
-    ],
-  },
-] as MenuItem[];
+type UiElement = {
+  id: string;
+  name: string;
+  type: string;
+} & any
+
+type UiGroup = {
+  name:string;
+  elements: UiElement[];
+}
+type UiWrapper = {
+  groups: UiGroup[];
+}
 
 function BaseComponent() {
   const { id } = useParams();
+  const params = useContext(ConfigurationContext).get(id);
   return (
     <div>
       params
-      {id}
+      {JSON.stringify(params)}
     </div>
   );
 }
 const views = new Map<string, FunctionComponent>();
-views.set('graph', BaseComponent);
+views.set('GRAPH', BaseComponent);
 
-root.render(<HomeKeeper menu={menu} views={views} />);
+async function start() {
+  const ui = await ((await fetch('/ui/config', {
+    method: 'GET',
+  })).json()) as UiWrapper;
+  const menu = ui.groups.map((it) => ({
+    name: it.name,
+    children: it.elements.map((elm) => ({
+      name: elm.name,
+      type: elm.type,
+      id: elm.id,
+    } as MenuItem)),
+  } as MenuItem));
+  const configuration = new Map();
+  ui.groups.forEach((it) => it.elements.forEach((elm) => {
+    configuration.set(elm.id, elm);
+  }));
+  const root = createRoot(document.getElementById('root') as Element);
+  root.render(<HomeKeeper menu={menu} views={views} configuration={configuration} />);
+}
+
+start();

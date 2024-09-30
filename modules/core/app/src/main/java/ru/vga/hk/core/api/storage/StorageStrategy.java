@@ -21,14 +21,13 @@
 
 package ru.vga.hk.core.api.storage;
 
-public class StorageStrategy {
-    private int periodInSeconds;
+import ru.vga.hk.core.api.common.HasId;
 
-    public int getPeriodInSeconds() {
-        return periodInSeconds;
-    }
+import java.util.concurrent.atomic.AtomicInteger;
 
-    public void setPeriodInSeconds(int periodInSeconds) {
-        this.periodInSeconds = periodInSeconds;
-    }
+public interface StorageStrategy extends HasId {
+
+    AtomicInteger counter = new AtomicInteger(0);
+
+    String getType();
 }

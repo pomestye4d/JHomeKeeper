@@ -21,6 +21,7 @@
 
 package ru.vga.hk.core.api.builder
 
+import org.rrd4j.ConsolFun
 import ru.vga.hk.core.api.common.BasicEventSource
 import ru.vga.hk.core.api.environment.Configuration
 import ru.vga.hk.core.api.environment.Environment
@@ -28,13 +29,14 @@ import ru.vga.hk.core.api.event.EventBus
 import ru.vga.hk.core.api.event.EventSource
 import ru.vga.hk.core.api.httpItem.HttpItemOptions
 import ru.vga.hk.core.api.rest.RestEvent
-import ru.vga.hk.core.api.storage.RrdStorage
+import ru.vga.hk.core.api.storage.Storage
 import ru.vga.hk.core.api.storage.StorageStrategy
 import ru.vga.hk.core.api.timer.TimerEvent
 import ru.vga.hk.core.api.ui.GraphPlot
 import ru.vga.hk.core.api.ui.GraphUiElement
 import ru.vga.hk.core.api.ui.UiGroup
 import ru.vga.hk.core.impl.httpItem.HttpItem
+import ru.vga.hk.core.impl.storage.RrdStorageStrategy
 import ru.vga.hk.core.impl.timer.TimerEventSource
 
 fun timer(name: String, delayInSeconds: Int, periodInSeconds: Int): EventSource<TimerEvent> {
@@ -63,6 +65,9 @@ fun rest(path: String, handler: RestEvent.() -> Unit) {
 
 fun httpItem(id: String, path: String, periodInSeconds: Int, customizer: ((options: HttpItemOptions) -> Unit)? = null):String {
     val httpItem = HttpItem(id, path, periodInSeconds, customizer)
+    if(httpItem.storageStrategyId != null){
+        Environment.getPublished(Storage::class.java).assignStrategy(id, httpItem.storageStrategyId)
+    }
     Environment.getPublished(Configuration::class.java).registerDisposable(httpItem)
     return id
 }
@@ -71,10 +76,12 @@ fun configProperty(name: String): String? {
     return Environment.getPublished(Configuration::class.java).getProperty(name)
 }
 
-fun storageStrategy(id: String, periodInSeconds: Int): String {
-    Environment.getPublished(RrdStorage::class.java)
-        .addStrategy(id, StorageStrategy().also { it.periodInSeconds = periodInSeconds })
-    return id
+fun rrdStorageStrategy(configure:RrdStrategyBuilder.() -> Unit): String {
+    val strategy = RrdStorageStrategy(StorageStrategy.counter.incrementAndGet().toString())
+    val builder = RrdStrategyBuilder(strategy);
+    builder.configure()
+    Environment.getPublished(Storage::class.java).addStrategy(strategy)
+    return strategy.id
 }
 
 @DslMarker
@@ -90,7 +97,7 @@ class GraphBuilder(private val graph: GraphUiElement) {
 @UiBuilderMarker
 class GroupBuilder(private val group: UiGroup) {
     fun graph(name: String, configure: GraphBuilder.() -> Unit) {
-        val graph = GraphUiElement(name)
+        val graph = GraphUiElement("graph-${group.elements.size}", name)
         group.elements.add(graph)
         GraphBuilder(graph).configure()
     }
@@ -109,4 +116,15 @@ class UiBuilder(private val groups: MutableList<UiGroup>) {
 @UiBuilderMarker
 fun ui(configure: UiBuilder.() -> Unit) {
     UiBuilder(Environment.getPublished(Configuration::class.java).ui).configure()
+}
+
+
+@UiBuilderMarker
+class RrdStrategyBuilder(private val strategy: RrdStorageStrategy) {
+    fun definition(stepInSeconds: Int){
+       strategy.def.step = 0
+    }
+    fun archive(steps:Int, rows:Int){
+        strategy.def.addArchive(ConsolFun.AVERAGE, 1.0, steps, rows)
+    }
 }

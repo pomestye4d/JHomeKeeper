@@ -21,39 +21,48 @@
 
 package ru.vga.hk.core.impl.webserver;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.environment.Environment;
-import ru.vga.hk.core.api.event.EventBus;
-import ru.vga.hk.core.api.rest.RestCallback;
-import ru.vga.hk.core.api.rest.RestEvent;
+import ru.vga.hk.core.api.storage.Storage;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
-public class ApiHandler implements HttpHandler {
-    private final Logger log = LoggerFactory.getLogger(ApiHandler.class);
+public class UiItemDataHandler implements HttpHandler {
+    private final Logger log = LoggerFactory.getLogger(getClass());
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        if (!"GET".equals(exchange.getRequestMethod()) && !"POST".equals(exchange.getRequestMethod())) {
+        if (!"POST".equals(exchange.getRequestMethod())) {
+            log.warn("invalid request method: {}", exchange.getRequestMethod());
             exchange.close();
             return;
         }
         try (exchange) {
-            var event = new RestEvent(new RestCallback() {
-                @Override
-                public void send(String message) throws Exception {
-                    exchange.getResponseBody().write(message.getBytes(StandardCharsets.UTF_8));
-                }
-            });
-            event.setRequestPath(exchange.getRequestURI().getPath().substring(8));
             exchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
             exchange.sendResponseHeaders(200, 0);
-            Environment.getPublished(EventBus.class).publishEvent("rest-%s".formatted(event.getRequestPath()), event);
+            var req = new Gson().fromJson(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8), JsonObject.class);
+            var itemId = req.getAsJsonPrimitive("itemId").getAsString();
+            var startDate = Instant.parse(req.getAsJsonPrimitive("startDate").getAsString());
+            var endDate = req.has("endDate")? Instant.parse(req.getAsJsonPrimitive("endDate").getAsString()): Instant.now();
+            var data = Environment.getPublished(Storage.class).getData(itemId, startDate, endDate);
+            var arr = new JsonArray();
+            for (var item : data) {
+                var obj = new JsonObject();
+                obj.addProperty("date", item.first().toString());
+                obj.addProperty("value", item.second());
+                arr.add(obj);
+            }
+            exchange.getResponseBody().write(new Gson().toJson(arr).getBytes(StandardCharsets.UTF_8));
         } catch (Throwable t){
-            log.error("unable to handler request", t);
+            log.error("unable to handle request", t);
         }
     }
 }
