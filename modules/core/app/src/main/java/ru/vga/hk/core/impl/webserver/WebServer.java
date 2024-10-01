@@ -6,8 +6,6 @@
 package ru.vga.hk.core.impl.webserver;
 
 import com.sun.net.httpserver.HttpServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.common.Disposable;
 import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.environment.Environment;

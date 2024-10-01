@@ -30,7 +30,6 @@ import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.rest.RestCallback;
 import ru.vga.hk.core.api.rest.RestEvent;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class ApiHandler implements HttpHandler {
