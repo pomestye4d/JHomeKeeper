@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.test.iml" filepath="$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/web-ui/home-keeper.web-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/web-ui/home-keeper.web-ui.iml" />
     </modules>
   </component>
 </project>

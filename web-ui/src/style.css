@@ -1,0 +1,8 @@
+.welcome{
+    height: 100%;
+    font-size: 40px;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

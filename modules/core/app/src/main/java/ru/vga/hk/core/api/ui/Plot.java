@@ -21,11 +21,11 @@
 
 package ru.vga.hk.core.api.ui;
 
-public class GraphPlot {
+public class Plot {
     public final String itemId;
     public final String name;
 
-    public GraphPlot(String itemId, String name) {
+    public Plot(String itemId, String name) {
         this.itemId = itemId;
         this.name = name;
     }

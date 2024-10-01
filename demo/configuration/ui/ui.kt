@@ -25,8 +25,8 @@ import items.httpItem1
 import ru.vga.hk.core.api.builder.ui
 
 val ui = ui {
-    group("Graphs"){
-        graph("Test"){
+    group("Charts"){
+        chart("Test"){
             plot("Test", httpItem1)
         }
     }

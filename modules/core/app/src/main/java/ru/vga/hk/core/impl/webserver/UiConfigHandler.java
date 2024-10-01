@@ -39,37 +39,6 @@ public class UiConfigHandler implements HttpHandler {
         try {
            var uiWrapper = new UiWrapper();
            uiWrapper.groups.addAll(Environment.getPublished(Configuration.class).ui);
-//
-//            var groupsGs = new JsonArray();
-//            result.add("groups", groupsGs);
-//            Environment.getPublished(Configuration.class).ui.forEach(it -> {
-//                groupsGs.add(new Gson().toJson(it));
-//            var group = new JsonObject();
-//            group.addProperty("name", it.name);
-//            groupsGs.add(group);
-//            var itemsGs = new JsonArray();
-//            group.add("items", itemsGs);
-//            it.elements.forEach(item ->{
-//                var itemGs = new JsonObject();
-//                itemsGs.add(itemGs);
-//                itemGs.addProperty("name", item.name);
-//                itemGs.addProperty("type", item.type.name());
-//                switch (item.type){
-//                    case GRAPH -> {
-//                        var plots = new JsonArray();
-//                        itemGs.add("plots", plots);
-//                        var graph = (GraphUiElement) item;
-//                        graph.plots.forEach(plot ->{
-//                           var plotGs = new JsonObject();
-//                           plots.add(plotGs);
-//                           plotGs.addProperty("name", plot.name);
-//                           plotGs.addProperty("itemId", plot.itemId);
-//                        });
-//
-//                    }
-//                }
-//            });
-//            });
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, 0);
             exchange.getResponseBody().write(new Gson().toJson(uiWrapper).getBytes(StandardCharsets.UTF_8));

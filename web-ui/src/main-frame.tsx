@@ -3,6 +3,7 @@
 import React, {FunctionComponent} from 'react';
 import {ProLayout} from '@ant-design/pro-layout';
 import {BrowserRouter, Link, Outlet, Route, Routes, useNavigate} from "react-router-dom";
+import './style.css';
 
 export type MenuItem = {
     name: string,
@@ -24,9 +25,9 @@ export function HomeKeeper(props: MainFrameProps) {
     return (
         <ConfigurationContext.Provider value={props.configuration}>
             <BrowserRouter>
-                return <Routes>
+                <Routes>
                 <Route path="/" element={React.createElement(MainFrameComponent, props)}>
-                    <Route key="/" path="/" element={<div>Welcome</div>}/>
+                    <Route key="/" path="/" element={<div className="welcome">Home Keeper</div>}/>
                     {[...props.views.entries()].map(entry => {
                         return <Route key={entry[0]} path={`${entry[0]}/:id`}
                                       element={React.createElement(entry[1], {})}/>

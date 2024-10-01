@@ -32,8 +32,8 @@ import ru.vga.hk.core.api.rest.RestEvent
 import ru.vga.hk.core.api.storage.Storage
 import ru.vga.hk.core.api.storage.StorageStrategy
 import ru.vga.hk.core.api.timer.TimerEvent
-import ru.vga.hk.core.api.ui.GraphPlot
-import ru.vga.hk.core.api.ui.GraphUiElement
+import ru.vga.hk.core.api.ui.Plot
+import ru.vga.hk.core.api.ui.ChartUiElement
 import ru.vga.hk.core.api.ui.UiGroup
 import ru.vga.hk.core.impl.httpItem.HttpItem
 import ru.vga.hk.core.impl.storage.RrdStorageStrategy
@@ -88,18 +88,18 @@ fun rrdStorageStrategy(configure:RrdStrategyBuilder.() -> Unit): String {
 annotation class UiBuilderMarker
 
 @UiBuilderMarker
-class GraphBuilder(private val graph: GraphUiElement) {
+class ChartBuilder(private val chart: ChartUiElement) {
     fun plot(name: String, itemId:String) {
-        graph.plots.add(GraphPlot(name, itemId))
+        chart.plots.add(Plot(name, itemId))
     }
 }
 
 @UiBuilderMarker
 class GroupBuilder(private val group: UiGroup) {
-    fun graph(name: String, configure: GraphBuilder.() -> Unit) {
-        val graph = GraphUiElement("graph-${group.elements.size}", name)
-        group.elements.add(graph)
-        GraphBuilder(graph).configure()
+    fun chart(name: String, configure: ChartBuilder.() -> Unit) {
+        val chart = ChartUiElement("chart-${group.elements.size}", name)
+        group.elements.add(chart)
+        ChartBuilder(chart).configure()
     }
 }
 

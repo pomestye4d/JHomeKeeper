@@ -22,5 +22,5 @@
 package ru.vga.hk.core.api.ui;
 
 public enum StandardUiElementType {
-    GRAPH
+    CHART
 }

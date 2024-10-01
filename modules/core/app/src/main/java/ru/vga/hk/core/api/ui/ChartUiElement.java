@@ -24,9 +24,9 @@ package ru.vga.hk.core.api.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphUiElement extends BaseUiElement{
-    public final List<GraphPlot> plots = new ArrayList<>();
-    public GraphUiElement(String id, String name) {
-        super(id, StandardUiElementType.GRAPH.name(), name);
+public class ChartUiElement extends BaseUiElement{
+    public final List<Plot> plots = new ArrayList<>();
+    public ChartUiElement(String id, String name) {
+        super(id, StandardUiElementType.CHART.name(), name);
     }
 }
