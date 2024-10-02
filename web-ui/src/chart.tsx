@@ -4,7 +4,6 @@ import { Chart as ChartJs } from 'chart.js/auto';
 import { useParams } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, MenuProps, Space } from 'antd/lib';
-import { Line } from 'react-chartjs-2';
 import { CategoryScale } from 'chart.js';
 import { ConfigurationContext } from './main-frame';
 import './chart.css';
@@ -41,16 +40,20 @@ export default function Chart() {
     label: opt.displayName,
   }));
   const [predefinedPeriod, setPredefinedPeriod] = useState('LAST_10_MIN' as PredefinedPeriod);
-  const [chartData] = useState({
-    labels: [2010, 2011, 2012],
-    datasets: [
-      {
-        borderColor: 'rgb(75, 192, 192)',
-        label: 'Plot 1',
-        data: [1, 2, 3],
-      },
-    ],
-  });
+  // const arr = [] as number[];
+  // for (let n = 0; n < 1000; n += 1) {
+  //   arr.push(n);
+  // }
+  // const [chartData] = useState({
+  //   labels: arr,
+  //   datasets: [
+  //     {
+  //       color: 'rgb(75, 192, 192)',
+  //       label: 'Plot 1',
+  //       data: arr,
+  //     },
+  //   ],
+  // });
   return (
     <div className="chart-container">
       <div className="chart-header">
@@ -74,9 +77,7 @@ export default function Chart() {
           </Dropdown>
         </div>
       </div>
-      <div className="chart-content">
-        <Line data={chartData} />
-      </div>
+      <div className="chart-content" />
     </div>
   );
 }

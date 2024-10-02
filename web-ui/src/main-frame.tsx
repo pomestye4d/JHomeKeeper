@@ -1,9 +1,10 @@
 /* eslint-disable */
 // eslint-disable-next-line no-use-before-define
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useState} from 'react';
 import {ProLayout} from '@ant-design/pro-layout';
 import {BrowserRouter, Link, Outlet, Route, Routes, useNavigate} from "react-router-dom";
 import './style.css';
+import Chart from "./test";
 
 export type MenuItem = {
     name: string,
@@ -22,12 +23,21 @@ export type MainFrameProps = {
 export const ConfigurationContext = React.createContext(new Map());
 
 export function HomeKeeper(props: MainFrameProps) {
+    const arr = [] as number[];
+    for (let n = 0; n < 1000; n += 1) {
+        arr.push(n);
+    }
+    const [chartData] = useState({
+        datasets: [{
+            data: [{ x: 10, y: 20 }, { x: 15, y: null }, { x: 20, y: 10 }],
+        }],
+    });
     return (
         <ConfigurationContext.Provider value={props.configuration}>
             <BrowserRouter>
                 <Routes>
                 <Route path="/" element={React.createElement(MainFrameComponent, props)}>
-                    <Route key="/" path="/" element={<div className="welcome">Home Keeper</div>}/>
+                    <Route key="/" path="/" element={<div className="welcome"><Chart/></div>}/>
                     {[...props.views.entries()].map(entry => {
                         return <Route key={entry[0]} path={`${entry[0]}/:id`}
                                       element={React.createElement(entry[1], {})}/>
