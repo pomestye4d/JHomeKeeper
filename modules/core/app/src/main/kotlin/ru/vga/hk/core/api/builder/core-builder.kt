@@ -90,7 +90,7 @@ annotation class UiBuilderMarker
 @UiBuilderMarker
 class ChartBuilder(private val chart: ChartUiElement) {
     fun plot(name: String, itemId:String) {
-        chart.plots.add(Plot(name, itemId))
+        chart.plots.add(Plot(itemId, name))
     }
 }
 

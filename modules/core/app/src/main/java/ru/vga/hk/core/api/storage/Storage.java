@@ -30,5 +30,5 @@ public interface Storage {
     void addStrategy(StorageStrategy strategy);
     void assignStrategy(String itemId, String strategyId);
     void store(String id, Number value);
-    List<Pair<Instant, Number>> getData(String id, Instant from, Instant to);
+    List<Pair<Instant, Double>> getData(String id, Instant from, Instant to);
 }

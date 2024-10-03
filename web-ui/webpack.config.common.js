@@ -12,6 +12,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js', '.tsx'], // resolve all the modules other than index.tsx
+    fallback: { timers: require.resolve('timers-browserify') },
   },
   module: {
     rules: [

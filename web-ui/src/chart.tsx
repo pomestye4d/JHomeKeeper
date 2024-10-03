@@ -1,17 +1,25 @@
 // eslint-disable-next-line no-use-before-define
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Chart as ChartJs } from 'chart.js/auto';
 import { useParams } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, MenuProps, Space } from 'antd/lib';
 import { CategoryScale } from 'chart.js';
-import { ConfigurationContext } from './main-frame';
 import './chart.css';
+import { ReactChart } from 'chartjs-react';
+import 'chartjs-adapter-moment';
+import moment from 'moment/moment';
 import { Option } from './common';
+import { ConfigurationContext } from './main-frame';
 
 type PredefinedPeriod = 'LAST_10_MIN' | 'LAST_HOUR' | 'LAST_MONTH' | 'LAST_YEAR'
 
 ChartJs.register(CategoryScale);
+
+type ChartData = {
+  plots: {itemId: string, name: string} []
+  name: string,
+}
 
 const options = [
   {
@@ -40,20 +48,56 @@ export default function Chart() {
     label: opt.displayName,
   }));
   const [predefinedPeriod, setPredefinedPeriod] = useState('LAST_10_MIN' as PredefinedPeriod);
-  // const arr = [] as number[];
-  // for (let n = 0; n < 1000; n += 1) {
-  //   arr.push(n);
-  // }
-  // const [chartData] = useState({
-  //   labels: arr,
-  //   datasets: [
-  //     {
-  //       color: 'rgb(75, 192, 192)',
-  //       label: 'Plot 1',
-  //       data: arr,
-  //     },
-  //   ],
-  // });
+  const [data, setData] = useState({
+    datasets: [],
+  });
+  const updateData = async () => {
+    let startDate = moment().add(-10, 'minutes');
+    switch (predefinedPeriod) {
+      case 'LAST_HOUR': {
+        startDate = moment().add(-1, 'hours');
+        break;
+      }
+      case 'LAST_MONTH': {
+        startDate = moment().add(-1, 'months');
+        break;
+      }
+      case 'LAST_YEAR': {
+        startDate = moment().add(-1, 'years');
+        break;
+      }
+      default:
+        break;
+    }
+    const chartParams = params as ChartData;
+    const datasets = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const plot of chartParams.plots) {
+      // eslint-disable-next-line no-await-in-loop
+      const plotData = await ((await fetch('/ui/itemData', {
+        method: 'POST',
+        body: JSON.stringify({
+          itemId: plot.itemId,
+          startDate: startDate.toISOString(),
+        }),
+      })).json()) as {date:string, value:number}[];
+      datasets.push({
+        label: plot.name,
+        data: plotData.map((it) => ({
+          x: it.date,
+          y: it.value,
+        })),
+      });
+    }
+    setData({
+      datasets: datasets as any,
+    });
+  };
+  useEffect(() => {
+    updateData();
+    const timer = window.setInterval(() => updateData(), 5000);
+    return () => window.clearInterval(timer);
+  }, [predefinedPeriod]);
   return (
     <div className="chart-container">
       <div className="chart-header">
@@ -77,7 +121,32 @@ export default function Chart() {
           </Dropdown>
         </div>
       </div>
-      <div className="chart-content" />
+      <div className="chart-content">
+        <ReactChart
+          id="unique-chart-id"
+          type="line"
+          data={data}
+          options={
+              {
+                animation: false,
+                scales: {
+                  x: {
+                    type: 'time',
+                    time: {
+                      displayFormats: {
+                        minute: 'DD HH:mm:ss',
+                      },
+                    },
+                    ticks: { source: 'auto' },
+                  },
+                  y: {
+                    type: 'linear',
+                  },
+                },
+              }
+            }
+        />
+      </div>
     </div>
   );
 }

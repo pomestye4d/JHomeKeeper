@@ -115,7 +115,7 @@ public class StorageImpl implements Storage, Disposable {
 
 
     @Override
-    public List<Pair<Instant, Number>> getData(String id, Instant from, Instant to) {
+    public List<Pair<Instant, Double>> getData(String id, Instant from, Instant to) {
         return ExceptionUtils.wrapException(() -> {
             var db = databases.get(id);
             if(db == null){
@@ -126,7 +126,7 @@ public class StorageImpl implements Storage, Disposable {
             var res = db.createFetchRequest(ConsolFun.AVERAGE, start, end, (end-start)/100).fetchData();
             var tss = res.getTimestamps();
             var values = res.getValues("data");
-            var result = new ArrayList<Pair<Instant, Number>>();
+            var result = new ArrayList<Pair<Instant, Double>>();
             for(int i=0; i<tss.length; i++) {
                 var ts = Util.getDate(tss[i]).toInstant();
                 var value = values[i];

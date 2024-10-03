@@ -54,10 +54,12 @@ public class UiItemDataHandler implements HttpHandler {
             var data = Environment.getPublished(Storage.class).getData(itemId, startDate, endDate);
             var arr = new JsonArray();
             for (var item : data) {
-                var obj = new JsonObject();
-                obj.addProperty("date", item.first().toString());
-                obj.addProperty("value", item.second());
-                arr.add(obj);
+                if(Double.isFinite(item.second())){
+                    var obj = new JsonObject();
+                    obj.addProperty("date", item.first().toString());
+                    obj.addProperty("value", item.second());
+                    arr.add(obj);
+                }
             }
             exchange.getResponseBody().write(new Gson().toJson(arr).getBytes(StandardCharsets.UTF_8));
         } catch (Throwable t){
