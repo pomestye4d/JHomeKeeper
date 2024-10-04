@@ -3,3 +3,4 @@
 /.gradle/
 /out/
 /local-dev/config/
+/src/main/resources/web/

@@ -51,6 +51,22 @@ export default function Chart() {
   const [data, setData] = useState({
     datasets: [],
   });
+  const [chartOptions, setChartOptions] = useState<any>({
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          displayFormats: {
+            minute: 'DD HH:mm:ss',
+          },
+        },
+        ticks: { source: 'auto' },
+      },
+      y: {
+        type: 'linear',
+      },
+    },
+  });
   const updateData = async () => {
     let startDate = moment().add(-10, 'minutes');
     switch (predefinedPeriod) {
@@ -94,10 +110,17 @@ export default function Chart() {
     });
   };
   useEffect(() => {
+    const opts = chartOptions;
+    delete opts.animation;
+    setChartOptions(opts);
     updateData();
-    const timer = window.setInterval(() => updateData(), 5000);
+    const timer = window.setInterval(() => {
+      setChartOptions({ ...chartOptions, animation: false });
+      updateData();
+    }, 5000);
     return () => window.clearInterval(timer);
   }, [predefinedPeriod]);
+
   return (
     <div className="chart-container">
       <div className="chart-header">
@@ -126,25 +149,7 @@ export default function Chart() {
           id="unique-chart-id"
           type="line"
           data={data}
-          options={
-              {
-                animation: false,
-                scales: {
-                  x: {
-                    type: 'time',
-                    time: {
-                      displayFormats: {
-                        minute: 'DD HH:mm:ss',
-                      },
-                    },
-                    ticks: { source: 'auto' },
-                  },
-                  y: {
-                    type: 'linear',
-                  },
-                },
-              }
-            }
+          options={chartOptions}
         />
       </div>
     </div>
