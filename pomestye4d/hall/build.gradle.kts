@@ -9,6 +9,9 @@ homeKeeper{
         login=project.property("ssh.login") as String
         password=project.property("ssh.password") as String
     }
+    jvm {
+        timezone="Europe/Moscow"
+    }
 }
 repositories {
     mavenCentral()

@@ -50,7 +50,7 @@ open class CreateDistTask() : DefaultTask() {
         val jdkDist =File(jdkDir, "jdk.tar.gz")
         if(!jdkDist.exists()) {
             println("downloading jdk")
-            when(extension.javaConfig.dist){
+            when(extension.jvmConfig.dist){
                 JDK_DIST.NIX_64 -> downloadFile("https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.tar.gz", jdkDist)
                 JDK_DIST.NIX_AARCH64 -> downloadFile("https://corretto.aws/downloads/latest/amazon-corretto-17-aarch64-linux-jdk.tar.gz", jdkDist)
             }
@@ -68,7 +68,8 @@ open class CreateDistTask() : DefaultTask() {
         jar.copyTo(File(configDir, jarName))
         println("creating launcher")
         val launcher = File(distDir, "home-keeper-startup.sh")
-        launcher.writeText(this::class.java.classLoader.getResource("startup.sh").readText().replace("\${rootDir}", "${extension.appConfig.rootDirectory}"))
+        launcher.writeText(this::class.java.classLoader.getResource("startup.sh").readText().replace("\${rootDir}", "${extension.appConfig.rootDirectory}").
+        replace("\${timezone}", extension.jvmConfig.timezone?.let { "-Duser.timezone=$it" }?:""))
         launcher.setExecutable(true)
         println("creating shutdown script")
         val shutdownScript = File(distDir, "home-keeper-shutdown.sh")

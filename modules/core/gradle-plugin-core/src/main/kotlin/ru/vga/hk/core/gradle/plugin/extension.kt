@@ -42,7 +42,7 @@ open class HomeKeeperExtension @Inject constructor(private val project: Project)
 
     internal var appConfig: AppConfig = AppConfig()
 
-    internal var javaConfig: JavaConfig = JavaConfig()
+    internal var jvmConfig: JvmConfig = JvmConfig()
 
     fun app(block: AppConfig.() -> Unit){
         appConfig.block()
@@ -52,8 +52,8 @@ open class HomeKeeperExtension @Inject constructor(private val project: Project)
         sshConfig.block()
     }
 
-    fun java(block: JavaConfig.() -> Unit){
-        javaConfig.block()
+    fun jvm(block: JvmConfig.() -> Unit){
+        jvmConfig.block()
     }
 
 
@@ -79,6 +79,7 @@ class AppConfig{
 }
 
 @HomeKeeperConfigMaker
-class JavaConfig{
+class JvmConfig{
     var dist = JDK_DIST.NIX_64
+    var timezone: String? = null
 }
