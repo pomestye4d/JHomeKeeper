@@ -22,6 +22,11 @@
 package ru.vga.hk.core.impl.boot;
 
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
+import ch.qos.logback.core.util.StatusPrinter2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.common.Disposable;
@@ -74,9 +79,6 @@ public class ConfigurationHandler implements Disposable {
             watcher = FileSystems.getDefault().newWatchService();
             refresh();
             thread = new Thread("configuration-watch-service"){
-                {
-                    setDaemon(true);
-                }
                 @Override
                 public void run() {
 
@@ -144,6 +146,22 @@ public class ConfigurationHandler implements Disposable {
                                 }
                             });
                         }
+                        if(e.getName().equals("logback.xml")) {
+                            var lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+                            lc.reset();
+
+                            var configurator = new JoranConfigurator();
+                            configurator.setContext(lc);
+                            lc.reset();
+
+                            try {
+                                configurator.doConfigure(classLoader.getResource("logback.xml"));
+                            } catch (JoranException je) {
+                                // StatusPrinter will handle this
+                            }
+                            StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
+                        }
+
                         if (e.getName().endsWith(".class") & !e.getName().contains("$")) {
                             classNames.add(e.getName().replace(".class", "").replace("/", "."));
                         }

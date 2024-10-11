@@ -24,6 +24,7 @@ package ru.vga.hk.tg.api;
 import ru.vga.hk.core.api.common.BaseEvent;
 
 public class TgMessageEvent extends BaseEvent {
+    private long chatId;
     private TgBotApi api;
 
     public TgBotApi getApi() {
@@ -32,5 +33,13 @@ public class TgMessageEvent extends BaseEvent {
 
     public void setApi(TgBotApi api) {
         this.api = api;
+    }
+
+    public long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(long chatId) {
+        this.chatId = chatId;
     }
 }

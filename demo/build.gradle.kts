@@ -1,24 +1,25 @@
 plugins {
     kotlin("jvm") version "2.0.0"
+    id("home-keeper-core")
+    id("home-keeper-tg")
 }
-
-sourceSets.main {
-    java.srcDirs("configuration")
+homeKeeper{
+    ssh {
+        host=project.property("ssh.host") as String
+        login=project.property("ssh.login") as String
+        password=project.property("ssh.password") as String
+    }
 }
-
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation(project(":modules:core:app"))
-    implementation(project(":modules:tg-bot:app"))
+sourceSets.main {
+    java.srcDirs("app/scripts")
+    resources.srcDirs("app/config")
 }
-tasks.withType<Jar> {
-    from("configuration") {
-        include ("application.properties")
-    }
-}
+
+
 task("localDeploy"){
     group = "build"
     dependsOn("jar")

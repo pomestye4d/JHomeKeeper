@@ -31,4 +31,5 @@ public interface Storage {
     void assignStrategy(String itemId, String strategyId);
     void store(String id, Number value);
     List<Pair<Instant, Double>> getData(String id, Instant from, Instant to);
+    Pair<Instant, Double> getLastValue(String id);
 }

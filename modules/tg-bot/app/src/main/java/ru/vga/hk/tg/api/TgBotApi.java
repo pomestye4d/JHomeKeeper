@@ -22,4 +22,5 @@
 package ru.vga.hk.tg.api;
 
 public interface TgBotApi {
+    void sendMessage(long chatId, String text);
 }

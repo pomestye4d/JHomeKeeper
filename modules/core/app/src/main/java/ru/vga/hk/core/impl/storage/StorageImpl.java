@@ -96,6 +96,9 @@ public class StorageImpl implements Storage, Disposable {
                 if(file.exists()){
                     return RrdDb.of(file.getAbsolutePath());
                 }
+                if(!file.getParentFile().exists()){
+                    file.getParentFile().mkdirs();
+                }
                 var strategy = (RrdStorageStrategy) (this.items2Strategy.containsKey(id)? this.strategies.get(this.items2Strategy.get(id)) : this.defaultStrategy);
                 var rrdDef = new RrdDef(file.getAbsolutePath(), 0,strategy.def.getStep());
                 rrdDef.addDatasource("data", DsType.GAUGE, 3600, Double.NaN, Double.NaN);
@@ -136,4 +139,16 @@ public class StorageImpl implements Storage, Disposable {
         });
     }
 
+    @Override
+    public Pair<Instant, Double> getLastValue(String id) {
+        return ExceptionUtils.wrapException(() -> {
+            var db = databases.get(id);
+            if(db == null){
+                return null;
+            }
+            var value = db.getLastDatasourceValue( "data");
+            var timeStamp = Util.getDate(db.getLastUpdateTime()).toInstant();
+            return new Pair<>(timeStamp, value);
+        });
+    }
 }

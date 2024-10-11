@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.BotSession;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -97,6 +98,7 @@ public class TgBotApiImpl extends TelegramLongPollingBot implements TgBotApi, Di
             if(id != null){
                 log.debug("message matches a pattern");
                 var event = new TgMessageEvent();
+                event.setChatId(chatId);
                 event.setApi(this);
                 Environment.getPublished(EventBus.class).publishEvent(id, event);
             }
@@ -108,6 +110,21 @@ public class TgBotApiImpl extends TelegramLongPollingBot implements TgBotApi, Di
         return username;
     }
 
+    @Override
+    public void sendMessage(long chatId, String text) {
+        log.debug("sending message %s to chat %s".formatted(text, chatId));
+        if(session == null || !session.isRunning()) {
+            log.warn("unable to send message because session is null or not running");
+        }
+        try {
+            var message = new SendMessage();
+            message.setChatId(chatId);
+            message.setText(text);
+            execute(message);
+        } catch (Throwable t) {
+           log.error("unable to send message", t);
+        }
+    }
 
     @Override
     public void dispose(){

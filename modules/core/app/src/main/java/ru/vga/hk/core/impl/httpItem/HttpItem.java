@@ -24,6 +24,8 @@ package ru.vga.hk.core.impl.httpItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.common.Disposable;
+import ru.vga.hk.core.api.common.HasId;
+import ru.vga.hk.core.api.common.Pair;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.event.EventBus;
 import ru.vga.hk.core.api.event.EventSource;
@@ -45,12 +47,13 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
+import java.time.Instant;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public class HttpItem implements Disposable, EventSource<Number> {
+public class HttpItem implements Disposable, EventSource<Number>, HasId {
 
     private final Timer timer;
 
@@ -122,6 +125,11 @@ public class HttpItem implements Disposable, EventSource<Number> {
             }
         }, TimeUnit.SECONDS.toMillis(periodInSeconds), TimeUnit.SECONDS.toMillis(periodInSeconds));
     }
+
+    public Pair<Instant, Double> getLastValue() {
+        return Environment.getPublished(Storage.class).getLastValue(id);
+    }
+
 
     @Override
     public void dispose() throws Exception {

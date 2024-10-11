@@ -4,6 +4,22 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/modules/core/gradle-plugin-core" name="gradle-plugin-core">
+                <projects>
+                  <project path="$PROJECT_DIR$/modules/core/gradle-plugin-core" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/modules/tg-bot/gradle-plugin-tg" name="gradle-plugin-tg">
+                <projects>
+                  <project path="$PROJECT_DIR$/modules/tg-bot/gradle-plugin-tg" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="delegatedBuild" value="false" />
         <option name="testRunner" value="PLATFORM" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -15,8 +31,12 @@
             <option value="$PROJECT_DIR$/modules/babel" />
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/core/app" />
+            <option value="$PROJECT_DIR$/modules/core/gradle-plugin-core" />
             <option value="$PROJECT_DIR$/modules/tg-bot" />
             <option value="$PROJECT_DIR$/modules/tg-bot/app" />
+            <option value="$PROJECT_DIR$/modules/tg-bot/gradle-plugin-tg" />
+            <option value="$PROJECT_DIR$/pomestye4d" />
+            <option value="$PROJECT_DIR$/pomestye4d/hall" />
             <option value="$PROJECT_DIR$/web-ui" />
           </set>
         </option>

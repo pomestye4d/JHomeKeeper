@@ -7,6 +7,10 @@ plugins {
     kotlin("jvm") version "2.0.0"
 }
 
+tasks.withType<Jar> {
+    archiveBaseName.set("home-keeper-tg")
+}
+
 repositories {
     mavenCentral()
 }

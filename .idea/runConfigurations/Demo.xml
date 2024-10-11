@@ -4,6 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="ru.vga.hk.core.impl.boot.JHomeKeeper" />
     <module name="home-keeper.modules.babel.main" />
+    <option name="PROGRAM_PARAMETERS" value="-home-keeper-tag" />
     <option name="WORKING_DIRECTORY" value="$ProjectFileDir$/demo/local-dev" />
     <method v="2">
       <option name="Make" enabled="true" />

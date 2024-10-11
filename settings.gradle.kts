@@ -4,13 +4,8 @@ include("modules:tg-bot:app")
 include("modules:babel")
 include("web-ui")
 include("demo")
+include("pomestye4d:hall")
 pluginManagement {
-    repositories {
-        maven {
-            name = "local-maven"
-            url = uri("local-maven-repository")
-        }
-        mavenCentral()
-        gradlePluginPortal()
-    }
+    includeBuild("modules/core/gradle-plugin-core")
+    includeBuild("modules/tg-bot/gradle-plugin-tg")
 }

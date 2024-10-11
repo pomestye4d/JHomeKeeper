@@ -19,11 +19,13 @@
  * SOFTWARE.
  */
 
-package rules
+package ru.vga.hk.tg.gradle.plugin
 
-import items.tg
-import ru.vga.hk.core.api.builder.When
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-val rule2 = When(tg.message("hello")){
-    println("got hello message from tg")
+open class HomeKeeperTgPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        target.dependencies.add("implementation", target.dependencies.project(hashMapOf("path" to  ":modules:tg-bot:app")))
+    }
 }

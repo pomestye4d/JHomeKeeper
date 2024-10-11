@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/modules/core/gradle-plugin-core/gradle-plugin-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/modules/core/gradle-plugin-core/gradle-plugin-core.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.test.iml" filepath="$PROJECT_DIR$/.idea/modules/modules/core/app/home-keeper.modules.core.app.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/web-ui/home-keeper.web-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/web-ui/home-keeper.web-ui.iml" />

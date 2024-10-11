@@ -23,6 +23,7 @@ package ru.vga.hk.core.api.builder
 
 import org.rrd4j.ConsolFun
 import ru.vga.hk.core.api.common.BasicEventSource
+import ru.vga.hk.core.api.common.HasId
 import ru.vga.hk.core.api.environment.Configuration
 import ru.vga.hk.core.api.environment.Environment
 import ru.vga.hk.core.api.event.EventBus
@@ -63,13 +64,13 @@ fun rest(path: String, handler: RestEvent.() -> Unit) {
     }
 }
 
-fun httpItem(id: String, path: String, periodInSeconds: Int, customizer: ((options: HttpItemOptions) -> Unit)? = null):String {
+fun httpItem(id: String, path: String, periodInSeconds: Int, customizer: ((options: HttpItemOptions) -> Unit)? = null):HttpItem {
     val httpItem = HttpItem(id, path, periodInSeconds, customizer)
     if(httpItem.storageStrategyId != null){
         Environment.getPublished(Storage::class.java).assignStrategy(id, httpItem.storageStrategyId)
     }
     Environment.getPublished(Configuration::class.java).registerDisposable(httpItem)
-    return id
+    return httpItem
 }
 
 fun configProperty(name: String): String? {
@@ -89,8 +90,8 @@ annotation class UiBuilderMarker
 
 @UiBuilderMarker
 class ChartBuilder(private val chart: ChartUiElement) {
-    fun plot(name: String, itemId:String) {
-        chart.plots.add(Plot(itemId, name))
+    fun plot(name: String, item:HasId) {
+        chart.plots.add(Plot(item.id, name))
     }
 }
 
