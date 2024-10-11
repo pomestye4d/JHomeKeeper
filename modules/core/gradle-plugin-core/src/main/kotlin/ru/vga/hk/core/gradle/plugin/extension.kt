@@ -69,8 +69,8 @@ open class HomeKeeperExtension @Inject constructor(private val project: Project)
 @HomeKeeperConfigMaker
 class SshConfig{
     lateinit var host: String
-    lateinit var login: String;
-    lateinit var password: String;
+    lateinit var login: String
+    lateinit var password: String
 }
 
 @HomeKeeperConfigMaker

@@ -33,22 +33,22 @@ abstract class BaseUpdateTask() : DefaultTask() {
     protected lateinit var extension: HomeKeeperExtension
 
     @Internal
-    protected lateinit var distDir: File;
+    protected lateinit var distDir: File
 
     @Internal
-    protected lateinit var sshFacade: SshFacade;
+    protected lateinit var sshFacade: SshFacade
 
 
     protected fun getProcessId(callback: SessionCallback): String? {
         val result = callback.executeCommand("""ps aux|grep "home-keeper-tag=true"""")!!
-        return result?.lines()?.find { it.contains("/bin/java") }?.let {
+        return result.lines()?.find { it.contains("/bin/java") }?.let {
             it.split(" ").filter { it.isNotEmpty() }[1].trim()
         }
     }
 
     protected fun stopApp(callback: SessionCallback) {
         println("stopping app")
-        var processId: String? = getProcessId(callback);
+        var processId: String? = getProcessId(callback)
         if (processId == null) {
             println("app is not running")
             return
@@ -85,8 +85,7 @@ abstract class BaseUpdateTask() : DefaultTask() {
 
 open class UninstallTask : BaseUpdateTask {
     @Inject
-    constructor(extension: HomeKeeperExtension) : super(extension) {
-    }
+    constructor(extension: HomeKeeperExtension) : super(extension)
 
     @TaskAction
     fun execute() {

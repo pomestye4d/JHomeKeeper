@@ -23,7 +23,6 @@ package ru.vga.hk.core.gradle.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.bundling.Jar
 
 open class HomeKeeperCorePlugin : Plugin<Project> {
     override fun apply(target: Project) {

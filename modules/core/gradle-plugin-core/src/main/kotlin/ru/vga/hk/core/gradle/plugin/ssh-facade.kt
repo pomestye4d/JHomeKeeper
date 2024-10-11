@@ -44,7 +44,7 @@ class SshFacade(private val sshConfig: SshConfig) {
     fun withSession(execute: SessionCallback.() -> Unit) {
         println("starting session at ${sshConfig.host}")
         val jsch = JSch()
-        val session = jsch.getSession(sshConfig.login, sshConfig.host, 22);
+        val session = jsch.getSession(sshConfig.login, sshConfig.host, 22)
         val conf = Properties()
         conf["StrictHostKeyChecking"] = "no"
         session.setConfig(conf)
@@ -102,7 +102,7 @@ class SshFacade(private val sshConfig: SshConfig) {
                                 output.write(String(tmp, 0, i))
                                 print(String(tmp, 0, i))
                             }
-                            if (channelExec.isClosed()) {
+                            if (channelExec.isClosed) {
                                 if (inputStream.available() > 0) continue
                                 if (channelExec.exitStatus != 0) {
                                     println(output)
@@ -126,12 +126,12 @@ class SshFacade(private val sshConfig: SshConfig) {
                     var result: ByteArray? = null
                     withInputStream(path) {
                         if (it != null) {
-                            val baos = ByteArrayOutputStream();
+                            val baos = ByteArrayOutputStream()
                             it.copyTo(baos, 256)
                             result = baos.toByteArray()
                         }
                     }
-                    return result!!;
+                    return result!!
                 }
 
                 override fun getContent(path: String, localFile: File) {
@@ -158,7 +158,7 @@ class SshFacade(private val sshConfig: SshConfig) {
                         } catch (e: SftpException) {
                             if (e.id == ChannelSftp.SSH_FX_NO_SUCH_FILE) {
                                 handler(null)
-                                return;
+                                return
                             } else {
                                 // something else went wrong
                                 throw e
@@ -193,7 +193,7 @@ class SshFacade(private val sshConfig: SshConfig) {
                                 ChannelSftp.OVERWRITE
                             )
                         }
-                        return;
+                        return
                     }
                     val files = sourceFile.listFiles()
                     if (files != null && files.size > 0 && !sourceFile.name.startsWith(".")) {
@@ -201,7 +201,7 @@ class SshFacade(private val sshConfig: SshConfig) {
                         val destFilePath = destPath + "/" + sourceFile.name
                         sftpChannel.mkdir(sourceFile.name)
                         if (!exists(destFilePath)) {
-                            mkDir(destFilePath);
+                            mkDir(destFilePath)
                         }
                         for (i in files.indices) {
                             uploadInternal(files[i], destPath + "/" + sourceFile.name, sftpChannel)
@@ -227,7 +227,7 @@ class SshFacade(private val sshConfig: SshConfig) {
                     if (res == "0") {
                         res = executeCommand("(test -d \"$path\" && echo 1) || echo 0")!!.trim()
                     }
-                    return "1" == res;
+                    return "1" == res
                 }
 
 
@@ -246,10 +246,10 @@ class SshFacade(private val sshConfig: SshConfig) {
                     }
                 }
 
-            });
+            })
 
         } finally {
-            session.disconnect();
+            session.disconnect()
         }
 
     }

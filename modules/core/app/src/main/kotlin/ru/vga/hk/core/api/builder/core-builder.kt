@@ -79,7 +79,7 @@ fun configProperty(name: String): String? {
 
 fun rrdStorageStrategy(configure:RrdStrategyBuilder.() -> Unit): String {
     val strategy = RrdStorageStrategy(StorageStrategy.counter.incrementAndGet().toString())
-    val builder = RrdStrategyBuilder(strategy);
+    val builder = RrdStrategyBuilder(strategy)
     builder.configure()
     Environment.getPublished(Storage::class.java).addStrategy(strategy)
     return strategy.id

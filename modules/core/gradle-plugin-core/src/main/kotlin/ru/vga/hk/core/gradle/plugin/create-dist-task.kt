@@ -33,7 +33,8 @@ import javax.inject.Inject
 open class CreateDistTask() : DefaultTask() {
     private lateinit var extension: HomeKeeperExtension
 
-    private lateinit var buildDir:File;
+    private lateinit var buildDir:File
+
     @Inject
     constructor(extension: HomeKeeperExtension) : this() {
         this.extension = extension
@@ -63,7 +64,7 @@ open class CreateDistTask() : DefaultTask() {
         println("creating config")
         val configDir = emptyDir(File(distDir, "config"))
         val jar = (project.tasks.getByName("jar") as Jar).outputs.files.first()
-        val jarName = "config-${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss"))}.jar";
+        val jarName = "config-${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss"))}.jar"
         jar.copyTo(File(configDir, jarName))
         println("creating launcher")
         val launcher = File(distDir, "home-keeper-startup.sh")
@@ -84,6 +85,6 @@ open class CreateDistTask() : DefaultTask() {
         fun getTaskName(project: Project): String {
             return "${project.name}-hk-create-dist"
         }
-        const val GROUP_NAME = "home-keeper";
+        const val GROUP_NAME = "home-keeper"
     }
 }

@@ -29,7 +29,7 @@ import java.security.MessageDigest
 
 fun ensureDirectoryExists(dir: File): File {
     if(!dir.exists() && !dir.mkdirs()){
-        throw Exception("Could not create directory: $dir");
+        throw Exception("Could not create directory: $dir")
     }
     return dir
 }
@@ -68,5 +68,5 @@ fun md5Hash(file: File): String {
     for (i in bytes.indices) {
         sb.append(((bytes[i].toInt() and 0xff) + 0x100).toString(16).substring(1))
     }
-    return sb.toString();
+    return sb.toString()
 }
