@@ -65,7 +65,7 @@ public class HttpItem implements Disposable, EventSource<Number>, HasId {
 
     public HttpItem(String id, String path, int periodInSeconds,  Consumer<HttpItemOptions> customizer) {
         this.id = id;
-        timer = new Timer(id, true);
+        timer = new Timer(id, false);
         HttpItemOptions options = new HttpItemOptions();
         options.setValueExtractor((value) -> value == null || value.isEmpty() ? null : new BigDecimal(value));
         options.setBodyBuilder(() -> null);
@@ -76,7 +76,7 @@ public class HttpItem implements Disposable, EventSource<Number>, HasId {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ExceptionUtils.wrapException(() -> {
+                try {
                     var url = new URI(path).toURL();
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setDoInput(true);
@@ -121,7 +121,9 @@ public class HttpItem implements Disposable, EventSource<Number>, HasId {
                         return;
                     }
                     logger.warn("value is null");
-                });
+                } catch (Throwable e) {
+                    logger.warn("unable to get response from %s".formatted(path), e);
+                };
             }
         }, TimeUnit.SECONDS.toMillis(periodInSeconds), TimeUnit.SECONDS.toMillis(periodInSeconds));
     }

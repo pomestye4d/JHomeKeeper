@@ -23,4 +23,4 @@ package items
 
 import ru.vga.hk.core.api.builder.httpItem
 
-var t_boiler = httpItem("t_boiler","http://localhost:8080/extApi/hello", 10)
+var t_boiler = httpItem("t_boiler","http://192.168.1.62:80/read", 60)
