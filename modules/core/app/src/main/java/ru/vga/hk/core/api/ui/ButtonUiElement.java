@@ -21,9 +21,11 @@
 
 package ru.vga.hk.core.api.ui;
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ButtonUiElement extends BaseNamedUiElement{
+    public ButtonUiElement(String id, String name) {
+        super(id, StandardUiElementType.BUTTON.name(), name);
     }
 }

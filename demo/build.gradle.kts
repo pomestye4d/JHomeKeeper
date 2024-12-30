@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.0"
     id("home-keeper-core")
-    id("home-keeper-tg")
 }
 homeKeeper{
     ssh {

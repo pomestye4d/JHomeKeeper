@@ -21,9 +21,7 @@
 
 package ru.vga.hk.core.api.ui;
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
-    }
+public enum ScreenSize {
+    SMALL,
+    LARGE
 }

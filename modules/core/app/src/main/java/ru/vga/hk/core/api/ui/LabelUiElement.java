@@ -21,9 +21,8 @@
 
 package ru.vga.hk.core.api.ui;
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
+public class LabelUiElement extends BaseNamedUiElement{
+    public LabelUiElement(String id, String name) {
+        super(id, StandardUiElementType.LABEL.name(), name);
     }
 }

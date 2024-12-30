@@ -21,9 +21,21 @@
 
 package ru.vga.hk.core.api.ui;
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
+import ru.vga.hk.core.api.common.Pair;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class GridRowElement extends BaseUiElement{
+    private final List<GridColumnElement> columns = new ArrayList<>();
+
+    public GridRowElement() {
+        super(StandardUiElementType.GRID_ROW.name());
+
+    }
+
+    public List<GridColumnElement> getColumns() {
+        return columns;
     }
 }

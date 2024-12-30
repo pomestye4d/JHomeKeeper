@@ -21,8 +21,10 @@
 
 package ru.vga.hk.core.api.builder
 
+import com.sun.rowset.internal.Row
 import org.rrd4j.ConsolFun
 import ru.vga.hk.core.api.common.BasicEventSource
+import ru.vga.hk.core.api.common.ButtonHandler
 import ru.vga.hk.core.api.common.HasId
 import ru.vga.hk.core.api.environment.Configuration
 import ru.vga.hk.core.api.environment.Environment
@@ -33,9 +35,7 @@ import ru.vga.hk.core.api.rest.RestEvent
 import ru.vga.hk.core.api.storage.Storage
 import ru.vga.hk.core.api.storage.StorageStrategy
 import ru.vga.hk.core.api.timer.TimerEvent
-import ru.vga.hk.core.api.ui.Plot
-import ru.vga.hk.core.api.ui.ChartUiElement
-import ru.vga.hk.core.api.ui.UiGroup
+import ru.vga.hk.core.api.ui.*
 import ru.vga.hk.core.impl.httpItem.HttpItem
 import ru.vga.hk.core.impl.storage.RrdStorageStrategy
 import ru.vga.hk.core.impl.timer.TimerEventSource
@@ -85,6 +85,21 @@ fun rrdStorageStrategy(configure:RrdStrategyBuilder.() -> Unit): String {
     return strategy.id
 }
 
+fun button(id:String, label: String, handler:()->Unit):ButtonUiElement {
+    Environment.getPublished(Configuration::class.java).registerButtonHandler(object : ButtonHandler {
+        override fun getId(): String {
+            return id
+        }
+
+        override fun handle() {
+            handler()
+        }
+    })
+    return ButtonUiElement(id, label)
+}
+
+fun label(id:String, label: String) = LabelUiElement(id, label)
+
 @DslMarker
 annotation class UiBuilderMarker
 
@@ -96,11 +111,32 @@ class ChartBuilder(private val chart: ChartUiElement) {
 }
 
 @UiBuilderMarker
+class RowBuilder(private val row: GridRowElement) {
+    fun column(elm:BaseUiElement, vararg sizes: Pair<ScreenSize, Int>) {
+        row.columns.add(GridColumnElement(elm, sizes.map { ru.vga.hk.core.api.common.Pair(it.first, it.second) }))
+    }
+}
+
+@UiBuilderMarker
+class GridBuilder(private val grid: GridItem) {
+    fun row(configure: RowBuilder.() -> Unit) {
+        val row = GridRowElement();
+        RowBuilder(row).configure()
+        grid.rows.add(row)
+    }
+}
+
+@UiBuilderMarker
 class GroupBuilder(private val group: UiGroup) {
     fun chart(name: String, configure: ChartBuilder.() -> Unit) {
         val chart = ChartUiElement("chart-${group.elements.size}", name)
         group.elements.add(chart)
         ChartBuilder(chart).configure()
+    }
+    fun grid(name:String, configure: GridBuilder.() -> Unit) {
+        val grid = GridItem("grid-${group.elements.size}", name)
+        group.elements.add(grid)
+        GridBuilder(grid).configure()
     }
 }
 
@@ -116,7 +152,11 @@ class UiBuilder(private val groups: MutableList<UiGroup>) {
 
 @UiBuilderMarker
 fun ui(configure: UiBuilder.() -> Unit) {
-    UiBuilder(Environment.getPublished(Configuration::class.java).ui).configure()
+    Environment.getPublished(Configuration::class.java).setUi{
+        val uiGroups = arrayListOf<UiGroup>();
+        UiBuilder(uiGroups).configure()
+        uiGroups
+    }
 }
 
 

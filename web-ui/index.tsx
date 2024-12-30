@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-use-before-define
-import React, { FunctionComponent } from 'react';
-import { createRoot } from 'react-dom/client';
-import { HomeKeeper, MenuItem } from './src/main-frame';
-import Chart from './src/chart';
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import {HomeKeeper, MenuItem} from './src/main-frame';
+import {views} from "./src/registry";
 
 type UiElement = {
   id: string;
@@ -17,9 +17,6 @@ type UiGroup = {
 type UiWrapper = {
   groups: UiGroup[];
 }
-
-const views = new Map<string, FunctionComponent>();
-views.set('CHART', Chart);
 
 async function start() {
   const ui = await ((await fetch('/ui/config', {

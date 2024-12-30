@@ -19,11 +19,9 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.core.api.ui;
+package ru.vga.hk.core.api.common;
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
-    }
+public interface ButtonHandler {
+    String getId();
+    void handle() throws Exception;
 }

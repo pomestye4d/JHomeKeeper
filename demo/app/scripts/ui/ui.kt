@@ -22,12 +22,28 @@
 package ui
 
 import items.httpItem1
+import ru.vga.hk.core.api.builder.button
+import ru.vga.hk.core.api.builder.label
 import ru.vga.hk.core.api.builder.ui
+import ru.vga.hk.core.api.ui.ScreenSize
 
 val ui = ui {
     group("Charts"){
         chart("Test"){
             plot("Test", httpItem1)
+        }
+    }
+    group("Bathroom"){
+        grid("Player") {
+            row {
+                column(button("play", "Play"){
+                    println("playing")
+                }, ScreenSize.SMALL to 50, ScreenSize.LARGE to 10)
+                column(button("stop", "Stop"){
+                    println("stop")
+                }, ScreenSize.SMALL to 50, ScreenSize.LARGE to 10)
+                column(label("song", "..."), ScreenSize.SMALL to 100, ScreenSize.LARGE to 20)
+            }
         }
     }
 }

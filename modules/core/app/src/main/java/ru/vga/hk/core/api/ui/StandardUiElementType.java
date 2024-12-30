@@ -22,5 +22,11 @@
 package ru.vga.hk.core.api.ui;
 
 public enum StandardUiElementType {
-    CHART
+    CHART,
+    BUTTON,
+    LABEL,
+    GRID_COLUMN,
+    GRID_ROW,
+    GRID
+
 }

@@ -23,20 +23,26 @@ package ru.vga.hk.core.api.environment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vga.hk.core.api.common.ButtonHandler;
 import ru.vga.hk.core.api.common.Disposable;
 import ru.vga.hk.core.api.ui.UiGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.function.Supplier;
 
 public class Configuration extends Properties {
     private final List<Disposable> disposables = Collections.synchronizedList(new ArrayList<>());
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public final List<UiGroup> ui = new ArrayList<>();
+    private Supplier<List<UiGroup>> ui;
+
+    private final Map<String, ButtonHandler> buttonHandlers = new HashMap<>();
 
     @Override
     public synchronized String toString() {
@@ -48,8 +54,24 @@ public class Configuration extends Properties {
         disposables.add(d);
     }
 
+    public void setUi(Supplier<List<UiGroup>> ui){
+        this.ui = ui;
+    }
+
+    public void registerButtonHandler(ButtonHandler handler){
+        buttonHandlers.put(handler.getId(), handler);
+    }
+
+    public ButtonHandler getButtonHandler(String id){
+        return buttonHandlers.get(id);
+    }
+    public List<UiGroup> getUi() {
+        return ui == null? Collections.emptyList(): ui.get();
+    }
+
     public void cleanup(){
-        ui.clear();
+        ui = null;
+        buttonHandlers.clear();
         Collections.reverse(disposables);
         for(var disp: disposables){
             try{

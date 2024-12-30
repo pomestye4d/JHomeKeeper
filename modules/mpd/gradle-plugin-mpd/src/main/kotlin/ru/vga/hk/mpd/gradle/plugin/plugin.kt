@@ -19,11 +19,13 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.core.api.ui;
+package ru.vga.hk.mpd.gradle.plugin
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+open class HomeKeeperTgPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        target.dependencies.add("implementation", target.dependencies.project(hashMapOf("path" to  ":modules:mpd:app")))
     }
 }

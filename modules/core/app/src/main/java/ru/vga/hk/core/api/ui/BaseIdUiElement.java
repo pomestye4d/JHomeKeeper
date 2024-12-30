@@ -21,9 +21,10 @@
 
 package ru.vga.hk.core.api.ui;
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
+public abstract class BaseIdUiElement extends BaseUiElement{
+    public final String id;
+    public BaseIdUiElement(String id, String type) {
+        super(type);
+        this.id = id;
     }
 }

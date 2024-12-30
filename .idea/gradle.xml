@@ -12,6 +12,11 @@
                   <project path="$PROJECT_DIR$/modules/core/gradle-plugin-core" />
                 </projects>
               </build>
+              <build path="$PROJECT_DIR$/modules/mpd/gradle-plugin-mpd" name="gradle-plugin-mpd">
+                <projects>
+                  <project path="$PROJECT_DIR$/modules/mpd/gradle-plugin-mpd" />
+                </projects>
+              </build>
               <build path="$PROJECT_DIR$/modules/tg-bot/gradle-plugin-tg" name="gradle-plugin-tg">
                 <projects>
                   <project path="$PROJECT_DIR$/modules/tg-bot/gradle-plugin-tg" />
@@ -32,6 +37,9 @@
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/core/app" />
             <option value="$PROJECT_DIR$/modules/core/gradle-plugin-core" />
+            <option value="$PROJECT_DIR$/modules/mpd" />
+            <option value="$PROJECT_DIR$/modules/mpd/app" />
+            <option value="$PROJECT_DIR$/modules/mpd/gradle-plugin-mpd" />
             <option value="$PROJECT_DIR$/modules/tg-bot" />
             <option value="$PROJECT_DIR$/modules/tg-bot/app" />
             <option value="$PROJECT_DIR$/modules/tg-bot/gradle-plugin-tg" />

@@ -38,7 +38,7 @@ public class UiConfigHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         try {
            var uiWrapper = new UiWrapper();
-           uiWrapper.groups.addAll(Environment.getPublished(Configuration.class).ui);
+            uiWrapper.groups.addAll(Environment.getPublished(Configuration.class).getUi());
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, 0);
             exchange.getResponseBody().write(new Gson().toJson(uiWrapper).getBytes(StandardCharsets.UTF_8));

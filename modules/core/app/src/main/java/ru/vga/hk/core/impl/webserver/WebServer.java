@@ -28,6 +28,7 @@ public class WebServer implements Disposable {
         delegate.createContext("/", new WebAppHandler());
         delegate.createContext("/extApi", new ApiHandler());
         delegate.createContext("/ui/config", new UiConfigHandler());
+        delegate.createContext("/ui/button", new UiButtonHandler());
         delegate.createContext("/ui/itemData", new UiItemDataHandler());
         delegate.start();
     }

@@ -19,11 +19,7 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.core.api.ui;
+package ru.vga.hk.mpd.impl;
 
-public abstract class BaseUiElement {
-    public final String type;
-    public BaseUiElement(String type) {
-        this.type = type;
-    }
+public class MpdApiImpl {
 }

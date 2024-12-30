@@ -19,9 +19,12 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.core.api.ui;
 
-import ru.vga.hk.core.api.builder.configProperty
-import ru.vga.hk.tg.api.builder.tgBot
-
-val tg = tgBot(configProperty("tg.username"), configProperty("tg.token"))
+public abstract class BaseNamedUiElement extends BaseIdUiElement{
+    public final String name;
+    public BaseNamedUiElement(String id, String type, String name) {
+        super(id, type);
+        this.name = name;
+    }
+}
