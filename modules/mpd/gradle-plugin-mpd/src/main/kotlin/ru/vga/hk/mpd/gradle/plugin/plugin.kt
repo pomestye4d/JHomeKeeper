@@ -24,7 +24,7 @@ package ru.vga.hk.mpd.gradle.plugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-open class HomeKeeperTgPlugin : Plugin<Project> {
+open class HomeKeeperMpdPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.dependencies.add("implementation", target.dependencies.project(hashMapOf("path" to  ":modules:mpd:app")))
     }

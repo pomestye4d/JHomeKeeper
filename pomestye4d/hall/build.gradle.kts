@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "1.9.24"
     id("home-keeper-core")
     id("home-keeper-tg")
 }

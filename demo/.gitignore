@@ -6,3 +6,4 @@ gradle.properties
 /local-dev/config/
 /local-dev/data/
 /app/config/application.properties
+/local-dev/logs/

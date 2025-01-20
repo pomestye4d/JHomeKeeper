@@ -22,6 +22,7 @@
 package ui
 
 import items.httpItem1
+import items.mpd1
 import ru.vga.hk.core.api.builder.button
 import ru.vga.hk.core.api.builder.label
 import ru.vga.hk.core.api.builder.ui
@@ -37,12 +38,11 @@ val ui = ui {
         grid("Player") {
             row {
                 column(button("play", "Play"){
-                    println("playing")
+                    mpd1.play()
                 }, ScreenSize.SMALL to 50, ScreenSize.LARGE to 10)
                 column(button("stop", "Stop"){
-                    println("stop")
+                    mpd1.stop()
                 }, ScreenSize.SMALL to 50, ScreenSize.LARGE to 10)
-                column(label("song", "..."), ScreenSize.SMALL to 100, ScreenSize.LARGE to 20)
             }
         }
     }

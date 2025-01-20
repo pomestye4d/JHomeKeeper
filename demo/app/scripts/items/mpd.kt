@@ -19,22 +19,8 @@
  * SOFTWARE.
  */
 
-package ru.vga.hk.mpd.api.builder
+package items
 
-import ru.vga.hk.mpd.impl.MpdApiImpl
+import ru.vga.hk.mpd.api.builder.mpd
 
-class MpdExt(private val player:MpdApiImpl){
-    fun stop() {
-        return player.stop()
-    }
-    fun play() {
-        return player.play()
-    }
-}
-fun mpd(ip:String, userName:String?, password:String?):MpdExt{
-    return MpdExt(MpdApiImpl(ip, userName, password))
-}
-
-fun mpd(ip:String):MpdExt{
-    return MpdExt(MpdApiImpl(ip))
-}
+val mpd1 = mpd("192.168.1.35")

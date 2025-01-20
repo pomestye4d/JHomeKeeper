@@ -21,5 +21,75 @@
 
 package ru.vga.hk.mpd.impl;
 
-public class MpdApiImpl {
+import org.bff.javampd.server.MPD;
+import ru.vga.hk.mpd.api.MpdApi;
+
+public class MpdApiImpl implements MpdApi {
+    private String ip;
+    private String login;
+    private String password;
+
+    public MpdApiImpl(String ip) {
+        this.ip = ip;
+        this.login = null;
+        this.password = null;
+    }
+
+    public MpdApiImpl(String ip, String login, String password) {
+        this.ip = ip;
+        this.login = login;
+        this.password = password;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public void stop() {
+        var mpd = MPD.builder()
+                .server(ip)
+                .port(6600)
+                .build();
+        try{
+            mpd.getPlayer().stop();
+        } finally {
+            mpd.close();
+        }
+    }
+
+    @Override
+    public void play() {
+        var mpd = MPD.builder()
+                .server(ip)
+                .port(6600)
+                .build();
+        try{
+            mpd.getPlayer().play();
+        } finally {
+            mpd.close();
+        }
+
+
+    }
 }
