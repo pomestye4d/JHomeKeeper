@@ -2,6 +2,7 @@ rootProject.name = "home-keeper"
 include("modules:core:app")
 include("modules:tg-bot:app")
 include("modules:mpd:app")
+include("modules:zigbee:app")
 include("modules:babel")
 include("web-ui")
 include("demo")
@@ -10,4 +11,5 @@ pluginManagement {
     includeBuild("modules/core/gradle-plugin-core")
     includeBuild("modules/tg-bot/gradle-plugin-tg")
     includeBuild("modules/mpd/gradle-plugin-mpd")
+    includeBuild("modules/zigbee/gradle-plugin-zigbee")
 }

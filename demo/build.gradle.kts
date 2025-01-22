@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.9.24"
     id("home-keeper-core")
     id("home-keeper-mpd")
+    id("home-keeper-zigbee")
 }
 homeKeeper{
     ssh {

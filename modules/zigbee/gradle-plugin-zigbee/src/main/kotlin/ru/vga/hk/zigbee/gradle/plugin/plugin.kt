@@ -19,8 +19,13 @@
  * SOFTWARE.
  */
 
-package items
+package ru.vga.hk.zigbee.gradle.plugin
 
-import ru.vga.hk.core.api.builder.httpItem
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-var httpItem1 = httpItem("item1","http://localhost:8082/extApi/hello", 10)
+open class HomeKeeperZigbeePlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        target.dependencies.add("implementation", target.dependencies.project(hashMapOf("path" to  ":modules:zigbee:app")))
+    }
+}

@@ -21,8 +21,10 @@
 
 package ui
 
+import items.co2LevelItem
 import items.httpItem1
 import items.mpd1
+import items.rozetka2
 import ru.vga.hk.core.api.builder.button
 import ru.vga.hk.core.api.builder.label
 import ru.vga.hk.core.api.builder.ui
@@ -32,6 +34,19 @@ val ui = ui {
     group("Charts"){
         chart("Test"){
             plot("Test", httpItem1)
+        }
+        chart("CO2"){
+            plot("CO2", co2LevelItem)
+        }
+        grid("Розетка 2") {
+            row {
+                column(button("turn-on", "Вкл"){
+                    rozetka2.sendCommand { state="ON" }
+                }, ScreenSize.SMALL to 50, ScreenSize.LARGE to 10)
+                column(button("turn-off", "Выкл"){
+                    rozetka2.sendCommand { state="OFF" }
+                }, ScreenSize.SMALL to 50, ScreenSize.LARGE to 10)
+            }
         }
     }
     group("Bathroom"){

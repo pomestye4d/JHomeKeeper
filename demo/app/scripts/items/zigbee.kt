@@ -21,6 +21,20 @@
 
 package items
 
-import ru.vga.hk.core.api.builder.httpItem
+import ru.vga.hk.zigbee.api.builder.EmptyClass
+import ru.vga.hk.zigbee.api.builder.zigbee
 
-var httpItem1 = httpItem("item1","http://localhost:8082/extApi/hello", 10)
+val zigbee = zigbee()
+
+class Co2DeviceMeasurements{
+    lateinit var eco2: Number
+}
+
+val co2Device = zigbee.device("0x00158d0000dacd76", Co2DeviceMeasurements::class, EmptyClass::class)
+
+val co2LevelItem = co2Device.item("eco2")
+
+class RozetkaCmd {
+    lateinit var state: String
+}
+val rozetka2 = zigbee.device("Розетка 2", EmptyClass::class, RozetkaCmd::class)
