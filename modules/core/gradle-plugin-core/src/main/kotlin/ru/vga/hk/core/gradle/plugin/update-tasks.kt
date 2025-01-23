@@ -116,7 +116,6 @@ open class InstallTask : BaseUpdateTask {
         dependsOn(CreateDistTask.getTaskName(project))
     }
 
-
     @TaskAction
     fun execute() {
         sshFacade.withSession {
@@ -163,6 +162,7 @@ open class InstallTask : BaseUpdateTask {
             delete("${extension.appConfig.rootDirectory}/jdk.tar.gz")
             val fileName = executeCommand("ls ${extension.appConfig.rootDirectory}")!!.lines().first { it.startsWith("amazon-corretto") }
             executeCommand("mv ${extension.appConfig.rootDirectory}/$fileName ${extension.appConfig.rootDirectory}/jre")
+            extension.postInstallHooks.forEach{ it.run() }
             if(false) {
                 executeCommand("/etc/init.d/home-keeper start")
             }
@@ -217,6 +217,7 @@ open class UpdateAppTask : BaseUpdateTask {
                 upload("${extension.appConfig.rootDirectory}/lib", File(distDir, "lib/$it"))
             }
             upload("${extension.appConfig.rootDirectory}/config", File(distDir, "config").listFiles()!!.first())
+            extension.postUpdateHooks.forEach{ it.run() }
             executeCommand("/etc/init.d/home-keeper start")
             println("application is updated")
         }

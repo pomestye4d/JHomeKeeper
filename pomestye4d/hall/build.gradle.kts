@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.9.24"
     id("home-keeper-core")
     id("home-keeper-tg")
+    id("home-keeper-zigbee")
 }
 homeKeeper{
     ssh {
@@ -12,6 +13,10 @@ homeKeeper{
     jvm {
         timezone="Europe/Moscow"
     }
+}
+zigBee{
+    comqttConfigFile = project.file("app/config/comqtt.yml")
+    zigbee2mqttConfigFile = project.file("app/config/zigbee2mqtt.yml")
 }
 repositories {
     mavenCentral()

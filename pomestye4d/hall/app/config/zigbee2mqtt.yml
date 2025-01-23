@@ -1,0 +1,46 @@
+version: 4
+homeassistant:
+  enabled: false
+frontend:
+  enabled: true
+  port: 8086
+  host: 0.0.0.0
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://localhost:1883
+serial:
+  adapter: ember
+  rtscts: false
+  port: >-
+    /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_00dc9d93da8bee11b83afa018acbdcd8-if00-port0
+advanced:
+  log_level: info
+  log_output:
+    - file
+  network_key:
+    - 15
+    - 41
+    - 66
+    - 214
+    - 12
+    - 101
+    - 227
+    - 212
+    - 123
+    - 232
+    - 111
+    - 4
+    - 223
+    - 184
+    - 206
+    - 58
+  pan_id: 56923
+  ext_pan_id:
+    - 48
+    - 29
+    - 60
+    - 203
+    - 108
+    - 51
+    - 49
+    - 3

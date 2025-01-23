@@ -23,9 +23,58 @@ package ru.vga.hk.zigbee.gradle.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.internal.extensions.core.extra
+import kotlin.reflect.KProperty
 
 open class HomeKeeperZigbeePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.dependencies.add("implementation", target.dependencies.project(hashMapOf("path" to  ":modules:zigbee:app")))
+        target.extensions.create(
+            "zigBee",
+            HomeKeeperZigBeeExtension::class.java
+        )
+        val ext = target.extensions.getByName("homeKeeper")
+        (ext::class.members.find { it.name == "postInstallHooks" } as KProperty<MutableList<Runnable>>).getter.call(ext).add{
+            println("zig bee post install")
+        }
+        (ext::class.members.find { it.name == "postUpdateHooks" }as KProperty<MutableList<Runnable>>).getter.call(ext).add{
+            println("zig bee post update")
+        }
+        target.tasks.create("${target.name}-delete-node"){
+            it.group = "home-keeper"
+            it.doLast {
+                deleteNode(it.project)
+            }
+        }
+        target.tasks.create("${target.name}-install-node"){
+            it.group = "home-keeper"
+            it.doLast {
+                installNode(it.project)
+            }
+        }
+        target.tasks.create("${target.name}-delete-comqtt"){
+            it.group = "home-keeper"
+            it.doLast {
+                deleteComqtt(it.project)
+            }
+        }
+        target.tasks.create("${target.name}-install-comqtt"){
+            it.group = "home-keeper"
+            it.doLast {
+                installComqtt(it.project, target.extensions.getByType(HomeKeeperZigBeeExtension::class.java))
+            }
+        }
+        target.tasks.create("${target.name}-delete-zigbee2mqtt"){
+            it.group = "home-keeper"
+            it.doLast {
+                deleteZigbee2mqtt(it.project)
+            }
+        }
+        target.tasks.create("${target.name}-install-zigbee2mqtt"){
+            it.group = "home-keeper"
+            it.doLast {
+                installZigbee2mqtt(it.project, target.extensions.getByType(HomeKeeperZigBeeExtension::class.java))
+            }
+        }
     }
 }

@@ -9,6 +9,8 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    implementation("com.jcraft:jsch:0.1.55")
 }
 
 

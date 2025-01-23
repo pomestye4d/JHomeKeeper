@@ -44,6 +44,10 @@ open class HomeKeeperExtension @Inject constructor(private val project: Project)
 
     internal var jvmConfig: JvmConfig = JvmConfig()
 
+    val postInstallHooks = arrayListOf<Runnable>()
+
+    val postUpdateHooks = arrayListOf<Runnable>()
+
     fun app(block: AppConfig.() -> Unit){
         appConfig.block()
     }
