@@ -3,6 +3,7 @@ plugins {
     id("home-keeper-core")
     id("home-keeper-tg")
     id("home-keeper-zigbee")
+    id("home-keeper-mpd")
 }
 homeKeeper{
     ssh {
