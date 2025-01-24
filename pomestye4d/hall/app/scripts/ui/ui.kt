@@ -21,13 +21,27 @@
 
 package ui
 
+import items.bedroomCo2LevelItem
+import items.bedroomHumidityItem
+import items.bedroomTemperatureItem
 import items.t_boiler
 import ru.vga.hk.core.api.builder.ui
 
-val ui = ui {
-    group("Charts"){
+var ui = ui {
+    group("Boiler"){
         chart("Boiler"){
             plot("Temperature", t_boiler)
+        }
+    }
+    group("Bedroom") {
+        chart("CO2") {
+            plot("CO2", bedroomCo2LevelItem)
+        }
+        chart("Temperature") {
+            plot("Temperature", bedroomTemperatureItem)
+        }
+        chart("Humidity") {
+            plot("Humidity", bedroomHumidityItem)
         }
     }
 }

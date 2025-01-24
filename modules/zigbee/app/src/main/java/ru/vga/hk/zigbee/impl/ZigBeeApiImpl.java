@@ -26,11 +26,13 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vga.hk.core.api.common.ProcessManager;
 import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.exception.ExceptionUtils;
 import ru.vga.hk.zigbee.api.ZigBeeApi;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -41,7 +43,15 @@ public class ZigBeeApiImpl implements ZigBeeApi {
 
     private final Logger logger = LoggerFactory.getLogger(ZigBeeApiImpl.class);
 
+    private final ProcessManager comqttProcessManager;
+
+    private final ProcessManager zigbee2mqttProcessManager;
+
     public ZigBeeApiImpl() throws MqttException {
+        comqttProcessManager = new ProcessManager("comqtt", new String[]{"./comqtt",  "--conf=config.yaml"}, "comqtt", new File("externalPrograms/comqtt"));
+        comqttProcessManager.startProcess();
+        zigbee2mqttProcessManager = new ProcessManager("zigbee2mqtt", new String[]{"sudo",  "../../node/dist/bin/pnpm", "start"}, "node", new File("externalPrograms/zigbee2mqtt/dist"));
+        zigbee2mqttProcessManager.startProcess();
         var clientId = UUID.randomUUID().toString();
         client = new MqttClient("tcp://localhost:1883",clientId);
         Environment.getPublished(Configuration.class).registerDisposable(this);
@@ -75,9 +85,14 @@ public class ZigBeeApiImpl implements ZigBeeApi {
     @Override
     public void dispose() throws Exception {
         try {
-            client.disconnect();
+            zigbee2mqttProcessManager.stopProcess();
+            comqttProcessManager.stopProcess();
+            if(client.isConnected()) {
+                client.disconnect();
+            }
             logger.info("Disconnected from mqtt server");
         } finally {
+            Environment.unpublish(ZigBeeApi.class);
             client.close();
             logger.info("Closed connection from mqtt server");
         }

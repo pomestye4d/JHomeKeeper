@@ -24,3 +24,4 @@ package items
 import ru.vga.hk.core.api.builder.httpItem
 
 var httpItem1 = httpItem("item1","http://localhost:8082/extApi/hello", 10)
+var httpItem2 = httpItem("item2","http://localhost:8082/extApi/hello", 10)

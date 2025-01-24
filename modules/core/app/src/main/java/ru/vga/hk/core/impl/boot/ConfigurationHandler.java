@@ -161,7 +161,7 @@ public class ConfigurationHandler implements Disposable {
                             StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
                         }
 
-                        if (e.getName().endsWith(".class") & !e.getName().contains("$")) {
+                        if (e.getName().endsWith(".class")/* & !e.getName().contains("$")*/) {
                             classNames.add(e.getName().replace(".class", "").replace("/", "."));
                         }
                     });

@@ -119,12 +119,12 @@ export default function Chart() {
       updateData();
     }, 5000);
     return () => window.clearInterval(timer);
-  }, [predefinedPeriod]);
+  }, [predefinedPeriod, id]);
 
   return (
     <div className="chart-container">
       <div className="chart-header">
-        <div className="chart-title">{params.name}</div>
+        <div className="chart-title">{params?.name}</div>
         <div className="chart-predefined-period">
           <Dropdown menu={{
             items,

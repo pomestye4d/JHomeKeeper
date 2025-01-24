@@ -24,6 +24,7 @@ package ru.vga.hk.core.impl.webserver;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.slf4j.LoggerFactory;
 import ru.vga.hk.core.api.environment.Configuration;
 import ru.vga.hk.core.api.environment.Environment;
 import ru.vga.hk.core.api.ui.UiGroup;
@@ -42,7 +43,9 @@ public class UiConfigHandler implements HttpHandler {
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, 0);
             exchange.getResponseBody().write(new Gson().toJson(uiWrapper).getBytes(StandardCharsets.UTF_8));
-        } finally {
+        } catch (Throwable e){
+            LoggerFactory.getLogger(UiConfigHandler.class).error("unable to get ui config", e);
+        } finally{
             exchange.close();
         }
     }

@@ -24,17 +24,16 @@ package items
 import ru.vga.hk.zigbee.api.builder.EmptyClass
 import ru.vga.hk.zigbee.api.builder.zigbee
 
-//val zigbee = zigbee()
-//
-//class Co2DeviceMeasurements{
-//    lateinit var eco2: Number
-//}
-//
-//val co2Device = zigbee.device("0x00158d0000dacd76", Co2DeviceMeasurements::class, EmptyClass::class)
-//
-//val co2LevelItem = co2Device.item("eco2")
-//
-//class RozetkaCmd {
-//    lateinit var state: String
-//}
-//val rozetka2 = zigbee.device("Розетка 2", EmptyClass::class, RozetkaCmd::class)
+val zigbeeBridge = zigbee()
+
+class Co2DeviceMeasurements{
+    lateinit var eco2: Number
+    lateinit var temperature: Number
+    lateinit var humidity: Number
+}
+
+val bedroomCo2Sensor = zigbeeBridge.device("0x00158d0000dacd76", Co2DeviceMeasurements::class, EmptyClass::class)
+
+val bedroomCo2LevelItem = bedroomCo2Sensor.item("eco2")
+val bedroomHumidityItem = bedroomCo2Sensor.item("humidity")
+val bedroomTemperatureItem = bedroomCo2Sensor.item("temperature")
