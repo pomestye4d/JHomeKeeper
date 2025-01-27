@@ -26,17 +26,22 @@ import com.google.gson.JsonObject
 import org.slf4j.LoggerFactory
 import ru.vga.hk.core.api.common.HasId
 import ru.vga.hk.core.api.environment.Environment
+import ru.vga.hk.core.api.event.EventBus
+import ru.vga.hk.core.api.event.EventSource
 import ru.vga.hk.core.api.storage.Storage
 import ru.vga.hk.zigbee.api.ZigBeeApi
+import ru.vga.hk.zigbee.api.ZigBeeEvent
 import ru.vga.hk.zigbee.impl.ZigBeeApiImpl
 import java.time.Instant
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 
 class EmptyClass
+annotation class ZigBeeAction
+
 class ZigBeeDevice<M, C : Any>(private val deviceId: String, private val commandClass: KClass<C>) {
-    internal var lastMeasurementsDate: Instant? = null
-    internal var lastMeasurementsValue: M? = null
+    internal var lastMessageDate: Instant? = null
+    internal var lastMessageValue: M? = null
 
     fun item(paramId: String): HasId {
         return object : HasId {
@@ -47,9 +52,22 @@ class ZigBeeDevice<M, C : Any>(private val deviceId: String, private val command
         }
     }
 
-    fun lastMeasurements(): Pair<M, Instant>? {
-        return lastMeasurementsDate?.let {
-            Pair(lastMeasurementsValue!!, it)
+    fun action():EventSource<ZigBeeEvent<M>> {
+        return object : EventSource<ZigBeeEvent<M>> {
+            override fun dispose() {
+                //noop
+            }
+
+            override fun getId(): String {
+                return "zigbee-$deviceId"
+            }
+
+        }
+    }
+
+    fun lastMessage(): Pair<M, Instant>? {
+        return lastMessageDate?.let {
+            Pair(lastMessageValue!!, it)
         }
     }
 
@@ -75,29 +93,41 @@ class ZigBeeExt {
     private val logger = LoggerFactory.getLogger(this::class.java)
     fun <M : Any, C : Any> device(
         id: String,
-        measurementsClass: KClass<M>,
+        messageClass: KClass<M>,
         commandClass: KClass<C>
     ): ZigBeeDevice<M, C> {
         val zigBeeDevice = ZigBeeDevice<M, C>(id, commandClass)
-        if (measurementsClass != EmptyClass::class) {
+        if (messageClass != EmptyClass::class) {
             Environment.getPublished(ZigBeeApi::class.java).subscribe(id) {
                 try {
                     val data = Gson().fromJson(
                         it,
                         JsonObject::class.java
                     )
-                    val result = measurementsClass.constructors.first().call()
-                    measurementsClass.members.forEach { f ->
-                        val value = data.get(f.name)?.asNumber?.toDouble()
+                    val result = messageClass.constructors.first().call()
+                    var hasAction = false
+                    messageClass.members.forEach { f ->
+                        val value = data.get(f.name)
                         value?.let {
-                            Environment.getPublished(Storage::class.java).store("$id-${f.name}", value)
                             if (f is KMutableProperty<*>) {
-                                f.setter.call(result, value)
+                                if(f.returnType.classifier?.equals(String::class) == true) {
+                                    f.setter.call(result, value.asString)
+                                } else {
+                                    f.setter.call(result, value.asDouble)
+                                }
+                            }
+                            if(f.annotations.none { it is ZigBeeAction}) {
+                                Environment.getPublished(Storage::class.java).store("$id-${f.name}", value.asNumber)
+                            } else {
+                                hasAction = true
                             }
                         }
                     }
-                    zigBeeDevice.lastMeasurementsDate = Instant.now()
-                    zigBeeDevice.lastMeasurementsValue = result
+                    if(hasAction){
+                        Environment.getPublished(EventBus::class.java).publishEvent("zigbee-$id", ZigBeeEvent(result))
+                    }
+                    zigBeeDevice.lastMessageDate = Instant.now()
+                    zigBeeDevice.lastMessageValue = result
                 } catch (e: Throwable) {
                     logger.error("unable to process measurements", e)
                 }
