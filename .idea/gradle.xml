@@ -12,6 +12,11 @@
                   <project path="$PROJECT_DIR$/modules/core/gradle-plugin-core" />
                 </projects>
               </build>
+              <build path="$PROJECT_DIR$/modules/iradio/gradle-plugin-iradio" name="gradle-plugin-iradio">
+                <projects>
+                  <project path="$PROJECT_DIR$/modules/iradio/gradle-plugin-iradio" />
+                </projects>
+              </build>
               <build path="$PROJECT_DIR$/modules/mpd/gradle-plugin-mpd" name="gradle-plugin-mpd">
                 <projects>
                   <project path="$PROJECT_DIR$/modules/mpd/gradle-plugin-mpd" />
@@ -42,6 +47,9 @@
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/core/app" />
             <option value="$PROJECT_DIR$/modules/core/gradle-plugin-core" />
+            <option value="$PROJECT_DIR$/modules/iradio" />
+            <option value="$PROJECT_DIR$/modules/iradio/app" />
+            <option value="$PROJECT_DIR$/modules/iradio/gradle-plugin-iradio" />
             <option value="$PROJECT_DIR$/modules/mpd" />
             <option value="$PROJECT_DIR$/modules/mpd/app" />
             <option value="$PROJECT_DIR$/modules/mpd/gradle-plugin-mpd" />

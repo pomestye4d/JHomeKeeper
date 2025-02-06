@@ -19,22 +19,9 @@
  * SOFTWARE.
  */
 
-package rules
+package items
 
-import items.iRadioBathroom
-import items.mpd1
-import items.remote1
-import ru.vga.hk.core.api.builder.When
+import ru.vga.hk.iradio.api.builder.iRadio
 
-val ruleRemote1 = When(remote1.action()) {
-//    when(payload.action){
-//        "1_single" -> mpd1.play()
-//        "2_single" -> mpd1.stop()
-//    }
-    when (payload.action) {
-        "1_single" -> iRadioBathroom.play(0)
-        "4_single" -> iRadioBathroom.stop()
-        "1_double" -> iRadioBathroom.increaseVolume()
-        "2_double" -> iRadioBathroom.decreaseVolume()
-    }
-}
+
+val iRadioBathroom = iRadio("192.168.1.35")

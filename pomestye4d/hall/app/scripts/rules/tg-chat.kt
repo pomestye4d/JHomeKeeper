@@ -21,13 +21,13 @@
 
 package rules
 
-import items.t_boiler
-import items.tg
-import ru.vga.hk.core.api.builder.When
-import ru.vga.hk.core.api.common.DateUtils
-
-val rule2 = When(tg.message("t_boiler")){
-    val data = t_boiler.lastValue
-    api.sendMessage(chatId, "${data.second} (${DateUtils.format(data.first, "dd.MM.yyyy HH:mm:ss")})")
-    println("got hello message from tg")
-}
+//import items.t_boiler
+//import items.tg
+//import ru.vga.hk.core.api.builder.When
+//import ru.vga.hk.core.api.common.DateUtils
+//
+//val rule2 = When(tg.message("t_boiler")){
+//    val data = t_boiler.lastValue
+//    api.sendMessage(chatId, "${data.second} (${DateUtils.format(data.first, "dd.MM.yyyy HH:mm:ss")})")
+//    println("got hello message from tg")
+//}

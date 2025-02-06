@@ -19,22 +19,13 @@
  * SOFTWARE.
  */
 
-package rules
+package ru.vga.hk.iradio.gradle.plugin
 
-import items.iRadioBathroom
-import items.mpd1
-import items.remote1
-import ru.vga.hk.core.api.builder.When
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-val ruleRemote1 = When(remote1.action()) {
-//    when(payload.action){
-//        "1_single" -> mpd1.play()
-//        "2_single" -> mpd1.stop()
-//    }
-    when (payload.action) {
-        "1_single" -> iRadioBathroom.play(0)
-        "4_single" -> iRadioBathroom.stop()
-        "1_double" -> iRadioBathroom.increaseVolume()
-        "2_double" -> iRadioBathroom.decreaseVolume()
+open class HomeKeeperIRadioPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        target.dependencies.add("implementation", target.dependencies.project(hashMapOf("path" to  ":modules:iradio:app")))
     }
 }

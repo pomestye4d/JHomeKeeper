@@ -4,6 +4,7 @@ plugins {
     id("home-keeper-tg")
     id("home-keeper-zigbee")
     id("home-keeper-mpd")
+    id("home-keeper-iradio")
 }
 homeKeeper{
     ssh {

@@ -19,22 +19,31 @@
  * SOFTWARE.
  */
 
-package rules
+package ru.vga.hk.iradio.api.builder
 
-import items.iRadioBathroom
-import items.mpd1
-import items.remote1
-import ru.vga.hk.core.api.builder.When
+import ru.vga.hk.iradio.impl.IradioApiImpl
 
-val ruleRemote1 = When(remote1.action()) {
-//    when(payload.action){
-//        "1_single" -> mpd1.play()
-//        "2_single" -> mpd1.stop()
-//    }
-    when (payload.action) {
-        "1_single" -> iRadioBathroom.play(0)
-        "4_single" -> iRadioBathroom.stop()
-        "1_double" -> iRadioBathroom.increaseVolume()
-        "2_double" -> iRadioBathroom.decreaseVolume()
+
+class IRadioExt(private val radio:IradioApiImpl){
+    fun stop() {
+        radio.stop()
     }
+    fun play(idx: Int) {
+        radio.play(idx)
+    }
+
+    fun increaseVolume(){
+        radio.increaseVolume()
+    }
+
+    fun decreaseVolume(){
+        radio.decreaseVolume()
+    }
+    fun nextSong(){
+        radio.nextSong()
+    }
+}
+
+fun iRadio(ip:String, port:Int=8080): IRadioExt {
+    return IRadioExt(IradioApiImpl(ip, port))
 }

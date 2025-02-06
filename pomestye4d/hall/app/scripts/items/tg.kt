@@ -24,4 +24,4 @@ package items
 import ru.vga.hk.core.api.builder.configProperty
 import ru.vga.hk.tg.api.builder.tgBot
 
-val tg = tgBot(configProperty("tg.username"), configProperty("tg.token"))
+//val tg = tgBot(configProperty("tg.username"), configProperty("tg.token"))
