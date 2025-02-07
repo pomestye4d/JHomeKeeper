@@ -36,5 +36,7 @@ val ruleRemote1 = When(remote1.action()) {
         "4_single" -> iRadioBathroom.stop()
         "1_double" -> iRadioBathroom.increaseVolume()
         "2_double" -> iRadioBathroom.decreaseVolume()
+        "2_single" -> iRadioBathroom.play(1)
+        "3_single" -> iRadioBathroom.nextSong()
     }
 }
