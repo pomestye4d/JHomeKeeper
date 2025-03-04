@@ -30,11 +30,17 @@ class Co2DeviceMeasurements{
     lateinit var eco2: Number
     lateinit var temperature: Number
     lateinit var humidity: Number
+    lateinit var battery: Number
 }
 
 class TemperatureMeasurements{
     lateinit var temperature: Number
     lateinit var humidity: Number
+    lateinit var battery: Number
+}
+
+class RemoteMeasurements{
+    lateinit var battery: Number
 }
 
 val bedroomCo2Sensor = zigbeeBridge.device("0x00158d0000dacd76", Co2DeviceMeasurements::class, EmptyClass::class)
@@ -42,7 +48,9 @@ val bedroomCo2Sensor = zigbeeBridge.device("0x00158d0000dacd76", Co2DeviceMeasur
 val bedroomCo2LevelItem = bedroomCo2Sensor.item("eco2")
 val bedroomHumidityItem = bedroomCo2Sensor.item("humidity")
 val bedroomTemperatureItem = bedroomCo2Sensor.item("temperature")
+val bedroomBattery = bedroomCo2Sensor.item("battery")
 
 val nataTemperatureSensor = zigbeeBridge.device("0x00124b00226870c1", TemperatureMeasurements::class, EmptyClass::class)
 val nataHumidityItem = nataTemperatureSensor.item("humidity")
 val nataTemperatureItem = nataTemperatureSensor.item("temperature")
+val nataBatteryItem = nataTemperatureSensor.item("battery")

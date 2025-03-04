@@ -48,13 +48,15 @@ public class ZigBeeApiImpl implements ZigBeeApi {
     private final ProcessManager zigbee2mqttProcessManager;
 
     public ZigBeeApiImpl() throws MqttException {
-        comqttProcessManager = new ProcessManager("comqtt", new String[]{"./comqtt",  "--conf=config.yaml"}, "comqtt", new File("externalPrograms/comqtt"));
+        comqttProcessManager = new ProcessManager("comqtt", new String[]{"./comqtt",  "--conf=config.yaml"}, "./comqtt", new File("externalPrograms/comqtt"));
         comqttProcessManager.startProcess();
-        zigbee2mqttProcessManager = new ProcessManager("zigbee2mqtt", new String[]{"sudo",  "../../node/dist/bin/pnpm", "start"}, "node", new File("externalPrograms/zigbee2mqtt/dist"));
+        zigbee2mqttProcessManager = new ProcessManager("zigbee2mqtt", new String[]{"sudo",  "../../node/dist/bin/pnpm", "start"}, "node index.js", new File("externalPrograms/zigbee2mqtt/dist"));
         zigbee2mqttProcessManager.startProcess();
         var clientId = UUID.randomUUID().toString();
         client = new MqttClient("tcp://localhost:1883",clientId);
-        Environment.getPublished(Configuration.class).registerDisposable(this);
+        Environment.getPublished(Configuration.class).registerDisposable(()->{
+            Environment.unpublish(ZigBeeApi.class);
+        });
         var options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
         options.setCleanSession(true);
@@ -92,7 +94,6 @@ public class ZigBeeApiImpl implements ZigBeeApi {
             }
             logger.info("Disconnected from mqtt server");
         } finally {
-            Environment.unpublish(ZigBeeApi.class);
             client.close();
             logger.info("Closed connection from mqtt server");
         }

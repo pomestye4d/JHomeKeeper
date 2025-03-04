@@ -49,4 +49,12 @@ var ui = ui {
             plot("Humidity", nataHumidityItem)
         }
     }
+    group("Utilities") {
+        chart("Batteries") {
+            plot("CO2 sensor", bedroomBattery)
+            plot("Nata sensor", nataBatteryItem)
+            plot("Remote 1", remote1BatteryItem)
+        }
+    }
+
 }

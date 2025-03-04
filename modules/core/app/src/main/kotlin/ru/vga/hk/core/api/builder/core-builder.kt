@@ -39,7 +39,7 @@ import ru.vga.hk.core.impl.httpItem.HttpItem
 import ru.vga.hk.core.impl.storage.RrdStorageStrategy
 import ru.vga.hk.core.impl.timer.TimerEventSource
 
-var elementIdx = 0
+var uiElementIndex = 0
 
 fun timer(name: String, delayInSeconds: Int, periodInSeconds: Int): EventSource<TimerEvent> {
     val result = TimerEventSource(name, delayInSeconds, periodInSeconds)
@@ -130,14 +130,14 @@ class GridBuilder(private val grid: GridItem) {
 @UiBuilderMarker
 class GroupBuilder(private val group: UiGroup) {
     fun chart(name: String, configure: ChartBuilder.() -> Unit) {
-        elementIdx++
-        val chart = ChartUiElement("chart-${elementIdx}", name)
+        uiElementIndex++
+        val chart = ChartUiElement("chart-${uiElementIndex}", name)
         group.elements.add(chart)
         ChartBuilder(chart).configure()
     }
     fun grid(name:String, configure: GridBuilder.() -> Unit) {
-        elementIdx++
-        val grid = GridItem("grid-${elementIdx}", name)
+        uiElementIndex++
+        val grid = GridItem("grid-${uiElementIndex}", name)
         group.elements.add(grid)
         GridBuilder(grid).configure()
     }
@@ -156,6 +156,7 @@ class UiBuilder(private val groups: MutableList<UiGroup>) {
 @UiBuilderMarker
 fun ui(configure: UiBuilder.() -> Unit) {
     Environment.getPublished(Configuration::class.java).setUi{
+        uiElementIndex = 0
         val uiGroups = arrayListOf<UiGroup>();
         UiBuilder(uiGroups).configure()
         uiGroups

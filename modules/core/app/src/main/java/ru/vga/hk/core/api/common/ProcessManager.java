@@ -92,13 +92,16 @@ public class ProcessManager {
 
     private String getPid(){
         var output = executeCommandAndWait(new String[]{"ps","aux"}, workingDirectory);
-        var line = output.lines().filter(it -> it != null && it.contains(searchPattern)).findFirst().orElse(null);
-        if(line == null){
+        var pids = output.lines().filter(it -> it != null && it.contains(searchPattern)).map(line ->{
+            var idx1 = line.indexOf(" ");
+            var line2 = line.substring(idx1+1).trim();
+            return line2.substring(0, line2.indexOf(" ")).trim();
+
+        }).toList();
+        if(pids.isEmpty()){
             return null;
         }
-        var idx1 = line.indexOf(" ");
-        line = line.substring(idx1+1);
-        return line.substring(0, line.indexOf(" "));
+        return pids.getLast();
     }
 
     private String executeCommandAndWait(String[] command, File workingDirectory){

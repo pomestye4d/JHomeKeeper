@@ -25,3 +25,5 @@ import ru.vga.hk.iradio.api.builder.iRadio
 
 
 val iRadioBathroom = iRadio("192.168.1.35")
+
+val iRadioBedroom = iRadio("192.168.1.41")

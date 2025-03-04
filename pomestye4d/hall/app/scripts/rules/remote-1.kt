@@ -22,7 +22,7 @@
 package rules
 
 import items.iRadioBathroom
-import items.mpd1
+import items.iRadioBedroom
 import items.remote1
 import ru.vga.hk.core.api.builder.When
 
@@ -33,10 +33,13 @@ val ruleRemote1 = When(remote1.action()) {
 //    }
     when (payload.action) {
         "1_single" -> iRadioBathroom.play(0)
-        "4_single" -> iRadioBathroom.stop()
+        "4_single" -> {
+            iRadioBathroom.stop()
+            iRadioBedroom.stop()
+        }
         "1_double" -> iRadioBathroom.increaseVolume()
         "2_double" -> iRadioBathroom.decreaseVolume()
-        "2_single" -> iRadioBathroom.play(1)
-        "3_single" -> iRadioBathroom.nextSong()
+        "2_single" -> iRadioBedroom.play(1)
+        "3_single" -> iRadioBedroom.nextSong()
     }
 }

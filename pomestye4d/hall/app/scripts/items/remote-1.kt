@@ -29,6 +29,8 @@ import ru.vga.hk.zigbee.api.builder.ZigBeeAction
 class Remote1Action{
     @ZigBeeAction
     lateinit var action: String
+    lateinit var battery: Number
 }
 
 val remote1 = zigbeeBridge.device("0xa4c138fafcc01352", Remote1Action::class, EmptyClass::class)
+val remote1BatteryItem = remote1.item("battery")

@@ -12,7 +12,7 @@ import moment from 'moment/moment';
 import { Option } from './common';
 import { ConfigurationContext } from './main-frame';
 
-type PredefinedPeriod = 'LAST_10_MIN' | 'LAST_HOUR' | 'LAST_MONTH' | 'LAST_YEAR'
+type PredefinedPeriod = 'LAST_10_MIN' | 'LAST_HOUR' | 'LAST_DAY'| 'LAST_WEEK' | 'LAST_MONTH' | 'LAST_YEAR'
 
 ChartJs.register(CategoryScale);
 
@@ -29,6 +29,14 @@ const options = [
   {
     id: 'LAST_HOUR' as PredefinedPeriod,
     displayName: 'Last hour',
+  },
+  {
+    id: 'LAST_DAY' as PredefinedPeriod,
+    displayName: 'Last day',
+  },
+  {
+    id: 'LAST_WEEK' as PredefinedPeriod,
+    displayName: 'Last week',
   },
   {
     id: 'LAST_MONTH' as PredefinedPeriod,
@@ -72,6 +80,14 @@ export default function Chart() {
     switch (predefinedPeriod) {
       case 'LAST_HOUR': {
         startDate = moment().add(-1, 'hours');
+        break;
+      }
+      case 'LAST_DAY': {
+        startDate = moment().add(-1, 'days');
+        break;
+      }
+      case 'LAST_WEEK': {
+        startDate = moment().add(-1, 'weeks');
         break;
       }
       case 'LAST_MONTH': {
