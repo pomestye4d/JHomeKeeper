@@ -53,7 +53,8 @@ var ui = ui {
         chart("Batteries") {
             plot("CO2 sensor", bedroomBattery)
             plot("Nata sensor", nataBatteryItem)
-            plot("Remote 1", remote1BatteryItem)
+            plot("Remote bathroom", remoteBathroomBatteryItem)
+            plot("Remote bedroom", remoteBedroomBatteryItem)
         }
     }
 

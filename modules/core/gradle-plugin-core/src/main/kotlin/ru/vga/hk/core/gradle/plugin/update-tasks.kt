@@ -41,7 +41,7 @@ abstract class BaseUpdateTask() : DefaultTask() {
 
     protected fun getProcessId(callback: SessionCallback): String? {
         val result = callback.executeCommand("""ps aux|grep "home-keeper-tag=true"""")!!
-        return result.lines()?.find { it.contains("/bin/java") }?.let {
+        return result.lines()?.find { it.contains("/bin/java") && !it.contains("sudo -u") }?.let {
             it.split(" ").filter { it.isNotEmpty() }[1].trim()
         }
     }

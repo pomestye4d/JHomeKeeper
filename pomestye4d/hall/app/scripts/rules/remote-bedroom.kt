@@ -19,18 +19,18 @@
  * SOFTWARE.
  */
 
-package items
+package rules
 
-import ru.vga.hk.zigbee.api.builder.EmptyClass
-import ru.vga.hk.zigbee.api.builder.ZigBeeAction
+import items.iRadioBedroom
+import items.remoteBedroom
+import ru.vga.hk.core.api.builder.When
 
-
-
-class Remote1Action{
-    @ZigBeeAction
-    lateinit var action: String
-    lateinit var battery: Number
+val ruleRemoteBedroom = When(remoteBedroom.action()) {
+    when (payload.action) {
+        "1_single" -> iRadioBedroom.play(0)
+        "4_single" -> {
+            iRadioBedroom.stop()
+        }
+        "2_single" -> iRadioBedroom.nextSong()
+    }
 }
-
-val remoteBathroom = zigbeeBridge.device("0xa4c138fafcc01352", Remote1Action::class, EmptyClass::class)
-val remoteBathroomBatteryItem = remoteBathroom.item("battery")
