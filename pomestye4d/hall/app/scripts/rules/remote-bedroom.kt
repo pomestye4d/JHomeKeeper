@@ -27,7 +27,7 @@ import ru.vga.hk.core.api.builder.When
 
 val ruleRemoteBedroom = When(remoteBedroom.action()) {
     when (payload.action) {
-        "1_single" -> iRadioBedroom.play(0)
+        "1_single" -> iRadioBedroom.play(1)
         "4_single" -> {
             iRadioBedroom.stop()
         }
